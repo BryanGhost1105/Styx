@@ -435,7 +435,7 @@
 <body
   class="bg-[#05080A] min-h-screen flex flex-col overflow-x-hidden selection:bg-[#64748b]/30 selection:text-[#64748b] text-white/70">
   <!-- Navigation -->
-  <header class="border-dashed sticky bg-[#000000] w-full z-50 top-0 backdrop-blur-md">
+  <header class="border-dashed fixed bg-[#000000] w-full z-50 top-0 backdrop-blur-md">
     <div class="grid grid-cols-12 h-14 sm:h-16">
       <!-- Left Links -->
       <div class="col-span-4 hidden md:flex items-center">
@@ -504,15 +504,15 @@
       </div>
       <div class="flex-1 overflow-y-auto pt-8 pb-12 px-8 space-y-8">
         <nav class="flex flex-col gap-6">
-          <a href="#"
+          <a href="#product" onclick="toggleMobileMenu(false)"
             class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">PRODUCT</a>
-          <a href="#"
+          <a href="#how-it-works" onclick="toggleMobileMenu(false)"
             class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">HOW
             IT WORKS</a>
-          <a href="#"
+          <a href="#capabilities" onclick="toggleMobileMenu(false)"
             class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">USE
             CASES</a>
-          <a href="#"
+          <a href="#pricing" onclick="toggleMobileMenu(false)"
             class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">PRICING</a>
         </nav>
         <div class="pt-8 border-t border-dashed border-white/10 space-y-6">
@@ -520,7 +520,7 @@
             <span class="text-xl font-light text-white/70 group-hover:text-white transition-colors">LOGIN</span>
             <iconify-icon icon="solar:user-linear" class="text-secondary w-6 h-6"></iconify-icon>
           </a>
-          <a href="#"
+          <a href="#" onclick="toggleMobileMenu(false)"
             class="w-full py-5 flex items-center justify-center bg-secondary text-white font-bold text-sm tracking-widest uppercase rounded-sm hover:bg-teal-400 transition-colors font-geist shadow-[0_0_20px_rgba(20,184,166,0.2)]">
             CLAIM YOUR SYSTEM
           </a>
@@ -1323,7 +1323,7 @@
 
               <!-- Content -->
               <div
-                class="absolute inset-0 p-10 flex flex-col justify-end bg-gradient-to-t from-[#05080A] via-transparent to-transparent">
+                class="absolute inset-0 p-6 md:p-10 flex flex-col justify-end bg-gradient-to-t from-[#05080A] via-transparent to-transparent">
                 <div class="flex items-center gap-2 mb-4">
                   <div class="w-1.5 h-1.5 rounded-full bg-secondary glow-pulse"></div>
                   <span class="text-[9px] uppercase tracking-[0.2em] font-geist font-bold text-slate-500">System
@@ -1338,7 +1338,7 @@
 
             <!-- Top Middle: Alerts -->
             <div
-              class="col-span-12 md:col-span-5 bento-card p-10 flex flex-col h-[300px] md:h-[400px] reveal-on-scroll">
+              class="col-span-12 md:col-span-5 bento-card p-6 md:p-10 flex flex-col h-[300px] md:h-[400px] reveal-on-scroll">
               <div class="bento-glow"></div>
               <div class="mb-12">
                 <div class="flex items-center gap-2 mb-4">
@@ -1429,7 +1429,7 @@
               </div>
               <!-- Content -->
               <div
-                class="absolute inset-0 p-10 flex flex-col justify-between bg-gradient-to-r from-[#05080A] via-transparent to-transparent">
+                class="absolute inset-0 p-6 md:p-10 flex flex-col justify-between bg-gradient-to-r from-[#05080A] via-transparent to-transparent">
                 <div class="max-w-md">
                   <span
                     class="text-[9px] uppercase tracking-[0.2em] font-geist font-bold text-slate-500 mb-4 block">Neural
@@ -1455,7 +1455,7 @@
 
             <!-- Growth Section -->
             <div
-              class="col-span-12 md:col-span-4 bento-card p-10 flex flex-col justify-center h-[250px] md:h-[350px] reveal-on-scroll">
+              class="col-span-12 md:col-span-4 bento-card p-6 md:p-10 flex flex-col justify-center h-[250px] md:h-[350px] reveal-on-scroll">
               <div class="bento-glow"></div>
               <div class="text-[72px] leading-none font-light tracking-tighter font-geist mb-4 text-secondary"
                 style="text-shadow: 0 0-40px rgba(20, 184, 166, 0.2);">
