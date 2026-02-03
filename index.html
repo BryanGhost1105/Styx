@@ -1,0 +1,2511 @@
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Styx AI - Intelligent Workflow Orchestration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <style>
+    :root {
+      --primary: #64748b;
+      --primary-rgb: 100, 116, 139;
+      --secondary: #14b8a6;
+      --bg-dark: #05080A;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --border-white: rgba(255, 255, 255, 0.1);
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+    }
+
+    /* Custom scrollbar */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Premium Bento Card Styles */
+    .bento-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px dashed var(--border-white);
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .bento-card:hover {
+      background: rgba(var(--primary-rgb), 0.02);
+      border-color: rgba(var(--primary-rgb), 0.3);
+      transform: translateY(-2px);
+    }
+
+    .bento-glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(var(--primary-rgb), 0.1) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .bento-card:hover .bento-glow {
+      opacity: 1;
+    }
+
+    /* Accent Hovers */
+    .hover-accent:hover {
+      color: var(--primary) !important;
+    }
+
+    .hover-fill-accent:hover {
+      background-color: var(--secondary) !important;
+      color: #05080A !important;
+      box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.4);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
+      }
+    }
+
+    .glow-pulse {
+      animation: pulse-glow 2s infinite;
+    }
+
+    .cta-primary {
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .cta-primary:hover {
+      border-color: var(--secondary);
+      background-color: rgba(20, 184, 166, 0.05);
+      box-shadow: 0 0 25px rgba(20, 184, 166, 0.15), inset 0 0 15px rgba(20, 184, 166, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .cta-primary:active {
+      transform: translateY(0px) scale(0.98);
+    }
+
+    /* Gradient Text */
+    .gradient-move {
+      background-size: 200% auto;
+      background-image: linear-gradient(to right, #ffffff 0%, var(--secondary) 50%, #ffffff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0.5s ease;
+    }
+
+
+    .group:hover .gradient-move,
+    .cta-primary:hover .gradient-move {
+      background-position: right center;
+      -webkit-text-fill-color: #ffffff !important;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    .animate-shimmer {
+      animation: shimmer 3s infinite linear;
+    }
+
+    /* Letter Swing */
+    @keyframes swing {
+      20% {
+        transform: rotate(15deg);
+      }
+
+      40% {
+        transform: rotate(-10deg);
+      }
+
+      60% {
+        transform: rotate(5deg);
+      }
+
+      80% {
+        transform: rotate(-5deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    .swing-char {
+      display: inline-block;
+      transform-origin: top center;
+    }
+
+    .group:hover .swing-char,
+    .cta-primary:hover .swing-char {
+      animation: swing 1s ease-in-out forwards;
+    }
+
+    .swing-char:nth-child(odd) {
+      animation-delay: 0.05s;
+    }
+
+    .swing-char:nth-child(even) {
+      animation-delay: 0.1s;
+    }
+
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+
+    @media (max-width: 640px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .comparison-header {
+        display: none;
+      }
+    }
+
+    .trust-badge {
+      filter: grayscale(1) opacity(0.5);
+      transition: all 0.3s ease;
+    }
+
+    .trust-badge:hover {
+      filter: grayscale(0) opacity(1);
+    }
+
+    /* Mobile Menu Overlay */
+    #mobile-menu {
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #mobile-menu.active {
+      transform: translateX(0);
+    }
+
+    /* Video Section Styles */
+    .video-container {
+      position: relative;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: rgba(var(--primary-rgb), 0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(var(--primary-rgb), 0.5);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 20;
+    }
+
+    .play-button:hover {
+      background: rgba(var(--primary-rgb), 0.4);
+      transform: translate(-50%, -50%) scale(1.1);
+      box-shadow: 0 0 30px rgba(var(--primary-rgb), 0.3);
+    }
+
+    .play-button iconify-icon {
+      font-size: 32px;
+      color: var(--secondary);
+      margin-left: 4px;
+    }
+
+    .video-glow {
+      position: absolute;
+      inset: -50px;
+      background: radial-gradient(circle at center, rgba(var(--primary-rgb), 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Active Feature Animations */
+    .animate-graph-stroke {
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      animation: graph-draw 4s ease-in-out infinite;
+    }
+
+    .animate-graph-fill {
+      animation: graph-wipe 4s ease-in-out infinite;
+    }
+
+    @keyframes graph-draw {
+      0% {
+        stroke-dashoffset: 200;
+      }
+
+      40% {
+        stroke-dashoffset: 0;
+      }
+
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes graph-wipe {
+      0% {
+        opacity: 0;
+        clip-path: inset(0 100% 0 0);
+      }
+
+      40% {
+        opacity: 0.2;
+        clip-path: inset(0 0 0 0);
+      }
+
+      100% {
+        opacity: 0.2;
+        clip-path: inset(0 0 0 0);
+      }
+    }
+
+    .anim-float {
+      animation: float-icon 3s ease-in-out infinite;
+    }
+
+    .anim-spin-slow {
+      animation: spin-icon 10s linear infinite;
+    }
+
+    .anim-pulse-subtle {
+      animation: pulse-icon 2s ease-in-out infinite;
+    }
+
+    .anim-wiggle {
+      animation: wiggle-icon 3s ease-in-out infinite;
+    }
+
+    @keyframes float-icon {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+
+    @keyframes spin-icon {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulse-icon {
+
+      0%,
+      100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+        filter: brightness(1.2);
+      }
+    }
+
+    @keyframes wiggle-icon {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      25% {
+        transform: rotate(-10deg);
+      }
+
+      75% {
+        transform: rotate(10deg);
+      }
+    }
+  </style>
+  <meta name="disabled-font-classes"
+    content="font-roboto,font-montserrat,font-poppins,font-playfair,font-instrument-serif,font-merriweather,font-bricolage,font-jakarta,font-manrope,font-space-grotesk,font-work-sans,font-pt-serif,font-geist-mono,font-space-mono,font-quicksand,font-nunito,font-newsreader,font-google-sans-flex,font-oswald,font-dm-sans">
+  <style>
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    .reveal-on-scroll {
+      animation: reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      animation-play-state: paused;
+    }
+
+    .reveal-on-scroll.is-visible {
+      animation-play-state: running;
+    }
+  </style>
+  <link id="all-fonts-link-font-geist" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-geist">
+    .font-geist {
+      font-family: 'Geist', sans-serif !important;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-[#05080A] min-h-screen flex flex-col overflow-x-hidden selection:bg-[#64748b]/30 selection:text-[#64748b] text-white/70">
+  <!-- Navigation -->
+  <header class="border-dashed sticky bg-[#000000] w-full z-50 top-0 backdrop-blur-md">
+    <div class="grid grid-cols-12 h-14 sm:h-16">
+      <!-- Left Links -->
+      <div class="col-span-4 hidden md:flex items-center">
+        <a href="#"
+          class="flex items-center justify-center hover:text-[#64748b] transition-colors border-dashed text-xs font-medium tracking-wide h-full border-white/10 border-r pr-8 pl-8 font-geist">
+          PRODUCT
+        </a>
+        <a href="#how-it-works"
+          class="h-full px-8 flex items-center justify-center text-xs font-medium tracking-wide hover:text-[#64748b] transition-colors border-r border-dashed border-white/10 font-geist">
+          HOW IT WORKS
+        </a>
+        <a href="#capabilities"
+          class="h-full px-8 flex items-center justify-center text-xs font-medium tracking-wide hover:text-[#64748b] transition-colors border-r border-dashed border-white/10 font-geist">
+          USE CASES
+        </a>
+      </div>
+
+      <!-- Mobile Menu Trigger -->
+      <div class="col-span-4 md:hidden flex items-center pl-6 border-r border-dashed border-white/10 cursor-pointer"
+        onclick="toggleMobileMenu(true)">
+        <iconify-icon icon="solar:hamburger-menu-linear" class="w-6 h-6 text-white"></iconify-icon>
+      </div>
+
+      <!-- Logo Center -->
+      <div class="col-span-8 md:col-span-4 flex relative items-center justify-center md:justify-center pr-6 md:pr-0">
+        <div class="flex items-center gap-2">
+          <img id="main-logo" src="Whisk_f580a9b66098f97a4b345b004b3e022eeg.png" alt="Styx AI Logo"
+            class="h-10 w-auto transition-all duration-500">
+          <span id="logo-text" class="font-geist font-semibold text-white tracking-tight hidden">STYX AI</span>
+        </div>
+      </div>
+
+      <!-- Right Links -->
+      <div class="col-span-4 md:col-span-4 md:flex items-center justify-end hidden">
+        <a href="#"
+          class="h-full px-8 hidden md:flex items-center justify-center text-xs font-medium tracking-wide hover:text-[#64748b] transition-colors border-r border-dashed border-white/10 border-l font-geist">
+          LOGIN
+        </a>
+        <a href="#"
+          class="h-full w-full md:w-auto px-8 flex items-center justify-center text-xs font-medium tracking-wide cta-primary gap-2 font-geist">
+          <span class="gradient-move tracking-tight">
+            <span class="swing-char">C</span><span class="swing-char">L</span><span class="swing-char">A</span><span
+              class="swing-char">I</span><span class="swing-char">M</span> <span class="swing-char">Y</span><span
+              class="swing-char">O</span><span class="swing-char">U</span><span class="swing-char">R</span> <span
+              class="swing-char">S</span><span class="swing-char">Y</span><span class="swing-char">S</span><span
+              class="swing-char">T</span><span class="swing-char">E</span><span class="swing-char">M</span>
+          </span>
+          <iconify-icon icon="solar:arrow-right-linear" class="w-4 h-4 text-secondary"></iconify-icon>
+        </a>
+      </div>
+    </div>
+    <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent">
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#05080A] z-[100] md:hidden flex flex-col">
+      <div class="h-16 flex items-center justify-between px-6 border-b border-dashed border-white/10">
+        <div class="flex items-center gap-2">
+          <img id="mobile-logo" src="Whisk_f580a9b66098f97a4b345b004b3e022eeg.png" alt="Styx AI Logo"
+            class="h-8 w-auto">
+        </div>
+        <button onclick="toggleMobileMenu(false)"
+          class="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white">
+          <iconify-icon icon="solar:close-circle-linear" class="w-8 h-8"></iconify-icon>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto pt-8 pb-12 px-8 space-y-8">
+        <nav class="flex flex-col gap-6">
+          <a href="#"
+            class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">PRODUCT</a>
+          <a href="#"
+            class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">HOW
+            IT WORKS</a>
+          <a href="#"
+            class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">USE
+            CASES</a>
+          <a href="#"
+            class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">PRICING</a>
+        </nav>
+        <div class="pt-8 border-t border-dashed border-white/10 space-y-6">
+          <a href="#" class="flex items-center justify-between group">
+            <span class="text-xl font-light text-white/70 group-hover:text-white transition-colors">LOGIN</span>
+            <iconify-icon icon="solar:user-linear" class="text-secondary w-6 h-6"></iconify-icon>
+          </a>
+          <a href="#"
+            class="w-full py-5 flex items-center justify-center bg-secondary text-white font-bold text-sm tracking-widest uppercase rounded-sm hover:bg-teal-400 transition-colors font-geist shadow-[0_0_20px_rgba(20,184,166,0.2)]">
+            CLAIM YOUR SYSTEM
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="flex-grow flex flex-col">
+    <!-- Hero Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 border-dashed border-white/10 border-b" style="">
+      <!-- Left Section: Hero Text -->
+      <div
+        class="relative overflow-hidden flex flex-col lg:px-20 lg:py-24 pt-16 px-6 pb-16 justify-center border-dashed border-white/10 border-r bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-slate-900/40 via-[#05080A] to-[#05080A] reveal-on-scroll">
+        <!-- Background Effect -->
+        <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div
+            class="absolute right-0 top-0 h-full w-full lg:w-[65%] overflow-hidden [mask-image:radial-gradient(ellipse_at_right,black_15%,transparent_70%)] opacity-80">
+            <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-r from-[#05080A] via-[#05080A]/70 to-transparent" style=""></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 max-w-2xl">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="flex h-2 w-2 rounded-full animate-pulse bg-teal-500" style=""></span>
+            <p class="font-mono text-xs tracking-widest uppercase font-geist text-white/70 reveal-on-scroll text-slate-500"
+              style="">
+              System v1.4 Online
+            </p>
+          </div>
+
+          <h1
+            class="text-4xl sm:text-6xl lg:text-7xl text-white leading-[1.1] mb-8 font-geist font-light tracking-tighter reveal-on-scroll">
+            Your workflow,
+            <br>
+            <span class="font-geist font-light tracking-tighter text-white/70">
+              fully autonomous.
+            </span>
+          </h1>
+
+          <p
+            class="text-lg sm:text-xl leading-relaxed max-w-xl mb-12 font-light font-geist text-white/80 reveal-on-scroll">
+            Styx AI reclaims your cognitive capacity. By unifying your tools, it eliminates context-switching—so you can
+            stop behaving like a manager and start thinking like a founder.
+          </p>
+
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 border border-dashed border-white/10 max-w-lg rounded-sm overflow-hidden"
+            style="">
+            <button
+              class="group flex items-center justify-center gap-3 px-8 py-5 cta-primary transition-all duration-300 border-b sm:border-b-0 sm:border-r border-dashed border-white/10 reveal-on-scroll"
+              style="">
+              <span class="font-bold text-[10px] uppercase font-geist gradient-move tracking-tight">
+                <span class="swing-char">A</span><span class="swing-char">c</span><span class="swing-char">t</span><span
+                  class="swing-char">i</span><span class="swing-char">v</span><span class="swing-char">a</span><span
+                  class="swing-char">t</span><span class="swing-char">e</span> <span class="swing-char">I</span><span
+                  class="swing-char">n</span><span class="swing-char">t</span><span class="swing-char">e</span><span
+                  class="swing-char">l</span><span class="swing-char">l</span><span class="swing-char">i</span><span
+                  class="swing-char">g</span><span class="swing-char">e</span><span class="swing-char">n</span><span
+                  class="swing-char">c</span><span class="swing-char">e</span>
+              </span>
+            </button>
+
+            <a href="#demo-video"
+              class="group flex items-center justify-center gap-3 px-8 py-5 bg-white/5 hover:bg-white/10 transition-all duration-300 reveal-on-scroll">
+              <span class="text-white font-medium tracking-wide text-[10px] uppercase font-geist transition-colors">
+                Watch System Demo
+              </span>
+              <div
+                class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                <iconify-icon icon="solar:play-bold" class="w-3 h-3 text-secondary"></iconify-icon>
+              </div>
+            </a>
+          </div>
+
+          <!-- Social Proof Above Fold -->
+          <div class="mt-12 flex flex-col gap-6 reveal-on-scroll">
+            <p class="text-[10px] font-geist uppercase tracking-[0.2em] text-slate-500 font-semibold">Trusted by
+              advanced teams at</p>
+            <div class="flex flex-wrap items-center gap-x-12 gap-y-6 opacity-80 hover:opacity-100 transition-opacity">
+              <div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all">
+                <iconify-icon icon="logos:pendo" class="w-20 h-5 md:w-24 md:h-6"></iconify-icon>
+              </div>
+              <div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all">
+                <iconify-icon icon="logos:linear" class="w-20 h-5 md:w-24 md:h-6"></iconify-icon>
+              </div>
+              <div
+                class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all text-white flex items-center gap-1">
+                <iconify-icon icon="logos:google-cloud" class="w-24 h-6 md:w-28 md:h-7"></iconify-icon>
+              </div>
+              <div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all">
+                <span class="text-white font-geist font-bold text-lg tracking-tighter italic opacity-90">Scale AI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Section: Visual/Dashboard -->
+      <div class="overflow-hidden reveal-on-scroll z-10 relative bg-gradient-to-br from-slate-400 to-slate-600"
+        style="mask-image: linear-gradient(210deg, transparent, black 0%, black 100%, transparent);">
+        <!-- Gradient Background Effect -->
+        <div class="absolute inset-0 bg-gradient-to-br from-[#64748b]/10 via-[#05080A] to-[#05080A] opacity-40"></div>
+        <div
+          class="absolute top-0 right-0 w-[600px] h-[600px] bg-[#64748b]/5 blur-[120px] rounded-full pointer-events-none">
+        </div>
+
+        <!-- Dashboard Mockup Container -->
+        <div class="z-10 flex lg:p-12 h-full p-4 sm:p-6 relative items-center justify-center">
+          <!-- Main App Window -->
+          <div
+            class="overflow-hidden flex flex-col w-full min-h-[400px] md:h-[450px] max-w-4xl border-white/20 border rounded-xl shadow-[0_0_50px_-12px_rgba(100,116,139,0.3)] backdrop-blur-3xl bg-slate-900/40">
+
+            <!-- Window Title Bar -->
+            <div class="h-10 border-b border-white/10 flex items-center px-4 bg-white/[0.02]">
+              <div class="flex gap-1.5 grayscale opacity-50">
+                <div class="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-[#27C93F]"></div>
+              </div>
+              <div class="mx-auto text-[10px] font-geist text-white/20 tracking-widest uppercase">STYX_OS_CORE_V1.4
+              </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
+              <!-- Sidebar -->
+              <div
+                class="md:w-56 md:flex flex-col bg-white/[0.02] w-full border-white/5 border-r pt-6 pr-4 pb-6 pl-4 hidden">
+                <div class="flex items-center gap-2 mb-8 px-2">
+                  <div
+                    class="w-6 h-6 rounded flex items-center justify-center text-black font-geist font-bold text-[10px] bg-secondary shadow-[0_0_15px_rgba(20,184,166,0.3)]"
+                    style="">
+                    S
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-[11px] font-semibold text-white tracking-tight">STYX_PRO</span>
+                    <span class="text-[9px] text-slate-500 uppercase tracking-tighter" style="">SYSTEM_STATUS:
+                      ACTIVE</span>
+                  </div>
+                </div>
+
+                <div class="space-y-1.5 overflow-y-auto no-scrollbar flex-1">
+                  <div
+                    class="flex cursor-pointer text-[11px] font-medium text-white font-geist bg-white/5 border-white/10 border rounded-md pt-2 pr-3 pb-2 pl-3 gap-x-2.5 items-center transition-all hover:bg-white/10"
+                    style="">
+                    <iconify-icon icon="solar:widget-3-bold-duotone" class="w-4 h-4 text-secondary"></iconify-icon>
+                    Orchestrator
+                  </div>
+                  <div
+                    class="flex items-center gap-2.5 px-3 py-2 text-slate-500 hover:text-white transition-all cursor-pointer text-[11px] font-geist"
+                    style="">
+                    <iconify-icon icon="solar:bolt-linear" class="w-4 h-4"></iconify-icon>
+                    Logic Flows
+                  </div>
+                  <div
+                    class="flex items-center gap-2.5 px-3 py-2 text-slate-500 hover:text-white transition-all cursor-pointer text-[11px] font-geist"
+                    style="">
+                    <iconify-icon icon="solar:layers-linear" class="w-4 h-4"></iconify-icon>
+                    Neural Sync
+                  </div>
+                  <div
+                    class="flex items-center gap-2.5 px-3 py-2 text-slate-500 hover:text-white transition-all cursor-pointer text-[11px] font-geist"
+                    style="">
+                    <iconify-icon icon="solar:graph-up-linear" class="w-4 h-4"></iconify-icon>
+                    Impact Stats
+                  </div>
+                </div>
+
+                <div class="mt-auto pt-4 border-t border-white/5 px-2">
+                  <div class="text-[9px] text-slate-600 mb-2 uppercase font-bold tracking-widest">Active Channels</div>
+                  <div class="flex -space-x-2">
+                    <div
+                      class="w-6 h-6 rounded-full border border-slate-900 bg-slate-800 flex items-center justify-center">
+                      <iconify-icon icon="logos:slack-icon" class="w-3 h-3"></iconify-icon>
+                    </div>
+                    <div
+                      class="w-6 h-6 rounded-full border border-slate-900 bg-slate-800 flex items-center justify-center">
+                      <iconify-icon icon="logos:linear" class="w-3 h-3"></iconify-icon>
+                    </div>
+                    <div
+                      class="w-6 h-6 rounded-full border border-slate-900 bg-slate-800 flex items-center justify-center">
+                      <iconify-icon icon="logos:notion-icon" class="w-3 h-3"></iconify-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Main Dashboard Content -->
+              <div class="flex-1 p-4 md:p-6 flex flex-col bg-transparent relative overflow-hidden">
+                <div class="flex justify-between items-center mb-6 md:mb-8">
+                  <div>
+                    <h3 class="text-white font-medium text-[10px] md:text-xs font-geist reveal-on-scroll">
+                      Cognitive Reclaimation
+                    </h3>
+                    <p class="text-[9px] md:text-[10px] text-slate-500 font-geist">Real-time optimization engine</p>
+                  </div>
+                  <div class="flex items-center gap-2 bg-secondary/10 px-2 py-1 rounded border border-secondary/20">
+                    <span class="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                    <span
+                      class="text-[8px] md:text-[9px] font-bold text-secondary uppercase tracking-widest font-geist">Live</span>
+                  </div>
+                </div>
+
+                <div class="mb-6 md:mb-10 relative">
+                  <div class="absolute -top-10 -left-10 w-32 h-32 bg-secondary/5 blur-3xl"></div>
+                  <div class="text-3xl md:text-5xl text-white mb-2 font-geist font-light tracking-tighter">
+                    +12.4h<span class="text-base md:text-lg text-slate-600 ml-1">/wk</span>
+                  </div>
+                  <div class="text-[10px] md:text-[11px] text-slate-500 flex items-center gap-2 font-geist">
+                    <span class="text-secondary font-bold">
+                      &uarr; 18.2%
+                    </span>
+                    Efficiency lift
+                  </div>
+                </div>
+
+                <!-- Activity Card -->
+                <div class="grid grid-cols-1 gap-4 flex-1">
+                  <div
+                    class="bg-white/[0.03] border border-white/10 rounded-lg p-4 md:p-5 reveal-on-scroll relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-3 opacity-20 hidden md:block">
+                      <iconify-icon icon="solar:programming-linear"
+                        class="w-8 h-8 md:w-12 md:h-12 text-secondary"></iconify-icon>
+                    </div>
+
+                    <div class="flex justify-between items-start mb-4 md:mb-6">
+                      <div class="">
+                        <div
+                          class="text-[9px] md:text-[10px] text-slate-500 mb-1 uppercase tracking-widest font-bold font-geist">
+                          Autonomous Queue
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                          <span class="text-base md:text-lg font-medium text-white font-geist">
+                            32 Logic Actions
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Flow Visual -->
+                    <div class="space-y-2">
+                      <div
+                        class="flex items-center gap-2 md:gap-3 text-[9px] md:text-[10px] text-white/60 p-2 md:p-2.5 bg-white/[0.02] rounded border border-white/5 hover:bg-white/5 transition-colors">
+                        <iconify-icon icon="solar:mailbox-linear" class="text-slate-500"></iconify-icon>
+                        <span class="truncate">Summarizing Jira updates...</span>
+                        <div class="ml-auto w-10 md:w-12 h-1 bg-white/10 rounded-full overflow-hidden shrink-0">
+                          <div class="w-3/4 h-full bg-secondary shadow-[0_0_8px_rgba(20,184,166,0.5)]"></div>
+                        </div>
+                      </div>
+                      <div
+                        class="flex items-center gap-2 md:gap-3 text-[9px] md:text-[10px] text-white/80 p-2 md:p-2.5 bg-white/[0.04] rounded border border-secondary/20">
+                        <iconify-icon icon="solar:notification-lines-duotone" class="text-secondary"></iconify-icon>
+                        <span class="font-medium truncate">Conflict Resolved</span>
+                        <span class="ml-auto text-[8px] text-slate-500 shrink-0">Just now</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Dashboard -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Logo Marquee -->
+    <div class="border-dashed bg-[#05080A] border-white/10 border-b group/footer" style="">
+      <div class="max-w-screen-2xl mr-auto ml-auto">
+        <div class="grid grid-cols-1 md:grid-cols-12">
+          <!-- Label -->
+          <div
+            class="col-span-12 md:col-span-2 py-8 px-6 md:px-10 border-b md:border-b-0 md:border-r border-dashed border-white/10 flex items-center bg-[#05080A] relative z-20 reveal-on-scroll"
+            style="">
+            <span class="text-xs font-medium tracking-widest text-slate-500 uppercase font-geist" style="">
+              Integrates With
+            </span>
+          </div>
+
+          <!-- Marquee -->
+          <div class="col-span-12 md:col-span-10 relative overflow-hidden h-20 flex items-center reveal-on-scroll"
+            style="mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);">
+            <div class="animate-marquee">
+              <!-- Set 1 -->
+              <div
+                class="w-56 h-20 flex-shrink-0 flex items-center justify-center border-r border-dashed border-white/10 opacity-40 hover:opacity-100 transition-opacity"
+                style="">
+                <span class="text-lg font-semibold text-white tracking-tighter font-geist">
+                  SLACK
+                </span>
+              </div>
+              <div
+                class="w-56 h-20 flex-shrink-0 flex items-center justify-center border-r border-dashed border-white/10 opacity-40 hover:opacity-100 transition-opacity"
+                style="">
+                <span class="text-white font-medium tracking-tighter text-lg font-geist">
+                  NOTION
+                </span>
+              </div>
+              <div
+                class="w-56 h-20 flex-shrink-0 flex items-center justify-center border-r border-dashed border-white/10 opacity-40 hover:opacity-100 transition-opacity"
+                style="">
+                <span class="text-white font-medium tracking-tighter text-lg font-geist">
+                  LINEAR
+                </span>
+              </div>
+              <div
+                class="w-56 h-20 flex-shrink-0 flex items-center justify-center border-r border-dashed border-white/10 opacity-40 hover:opacity-100 transition-opacity"
+                style="">
+                <span class="text-white font-medium tracking-tighter text-lg font-geist">
+                  HUBSPOT
+                </span>
+              </div>
+              <div
+                class="w-56 h-20 flex-shrink-0 flex items-center justify-center border-r border-dashed border-white/10 opacity-40 hover:opacity-100 transition-opacity"
+                style="">
+                <span class="text-white font-semibold tracking-tighter text-lg font-geist">
+                  GITHUB
+                </span>
+              </div>
+
+              <!-- Set 2 -->
+              <div
+                class="w-56 h-20 flex-shrink-0 flex items-center justify-center border-r border-dashed border-white/10 opacity-40 hover:opacity-100 transition-opacity"
+                style="">
+                <span class="text-lg font-semibold text-white tracking-tighter font-geist">
+                  SLACK
+                </span>
+              </div>
+              <div
+                class="w-56 h-20 flex-shrink-0 flex items-center justify-center border-r border-dashed border-white/10 opacity-40 hover:opacity-100 transition-opacity"
+                style="">
+                <span class="text-white font-medium tracking-tighter text-lg font-geist">
+                  NOTION
+                </span>
+              </div>
+              <div
+                class="w-56 h-20 flex-shrink-0 flex items-center justify-center border-r border-dashed border-white/10 opacity-40 hover:opacity-100 transition-opacity"
+                style="">
+                <span class="text-white font-medium tracking-tighter text-lg font-geist">
+                  LINEAR
+                </span>
+              </div>
+              <div
+                class="w-56 h-20 flex-shrink-0 flex items-center justify-center border-r border-dashed border-white/10 opacity-40 hover:opacity-100 transition-opacity"
+                style="">
+                <span class="text-white font-medium tracking-tighter text-lg font-geist">
+                  HUBSPOT
+                </span>
+              </div>
+              <div
+                class="w-56 h-20 flex-shrink-0 flex items-center justify-center border-r border-dashed border-white/10 opacity-40 hover:opacity-100 transition-opacity"
+                style="">
+                <span class="text-white font-semibold tracking-tighter text-lg font-geist">
+                  GITHUB
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>
+        @keyframes marquee-scroll {
+          0% {
+            transform: translateX(0);
+          }
+
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        .animate-marquee {
+          display: flex;
+          width: fit-content;
+          animation: marquee-scroll 80s linear infinite;
+        }
+
+        .group\/footer:hover .animate-marquee {
+          animation-play-state: paused;
+        }
+      </style>
+    </div>
+
+    <!-- Problem/Solution Section -->
+    <section class="border-dashed bg-[#05080A] border-white/10 border-b pt-24 pb-24" style="">
+      <div class="max-w-6xl mr-auto ml-auto pr-6 pl-6">
+        <div class="mb-16 relative">
+          <div class="absolute -top-12 -left-12 w-32 h-32 bg-[#64748b]/5 rounded-full blur-3xl" aria-hidden="true">
+          </div>
+
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8 z-10 relative gap-x-8 gap-y-8">
+            <div class="max-w-2xl">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="uppercase text-xs font-semibold tracking-widest font-geist text-slate-500" style="">
+                  01. The Problem
+                </span>
+              </div>
+
+              <h2
+                class="text-4xl md:text-5xl lg:text-6xl text-white font-light tracking-tighter mb-4 font-geist leading-[1.1] reveal-on-scroll">
+                Busy is a
+                <span class="">decoy for progress.</span>
+              </h2>
+
+              <p class="text-lg font-geist max-w-md text-white/70 reveal-on-scroll" style="">
+                You're not struggling with a lack of time; you're struggling with a surplus of noise. Styx AI resolves
+                the "context tax" that costs you 40% of your mental energy every single day.
+              </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+              <a href="#"
+                class="sm:w-auto hover:bg-slate-200 transition-colors font-medium text-black font-geist text-center bg-white w-full rounded-none pt-3 pr-6 pb-3 pl-6"
+                style="">
+                See Styx in Action
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-12 h-[1px] w-full bg-gradient-to-r from-slate-800 via-slate-700 to-transparent" style=""></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 mt-16 mb-24 reveal-on-scroll">
+          <div class="bg-[#05080A] p-10">
+            <span class="text-[10px] text-slate-500 uppercase tracking-widest font-geist mb-4 block">Reactive State
+              (Before)</span>
+            <ul class="space-y-4">
+              <li class="flex items-center gap-3 text-sm text-white/50 font-geist">
+                <iconify-icon icon="solar:close-circle-linear" class="text-red-500/50"></iconify-icon>
+                <span>Context-switching between 12+ fragmented apps</span>
+              </li>
+              <li class="flex items-center gap-3 text-sm text-white/50 font-geist">
+                <iconify-icon icon="solar:close-circle-linear" class="text-red-500/50"></iconify-icon>
+                <span>High-leverage work buried under notification noise</span>
+              </li>
+              <li class="flex items-center gap-3 text-sm text-white/50 font-geist">
+                <iconify-icon icon="solar:close-circle-linear" class="text-red-500/50"></iconify-icon>
+                <span>Decision fatigue disguised as productivity</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-[#05080A] p-10 relative overflow-hidden group">
+            <div class="absolute inset-0 bg-teal-500/[0.03] group-hover:bg-teal-500/[0.05] transition-colors"></div>
+            <span
+              class="text-[10px] text-teal-500 uppercase tracking-widest font-geist mb-4 block relative z-10">Intentional
+              State (After)</span>
+            <ul class="space-y-4 relative z-10">
+              <li class="flex items-center gap-3 text-sm text-white font-geist">
+                <iconify-icon icon="solar:check-circle-linear" class="text-teal-500"></iconify-icon>
+                <span>Unified "command center" for your entire stack</span>
+              </li>
+              <li class="flex items-center gap-3 text-sm text-white font-geist">
+                <iconify-icon icon="solar:check-circle-linear" class="text-teal-500"></iconify-icon>
+                <span>AI-weighted priorities presented for approval</span>
+              </li>
+              <li class="flex items-center gap-3 text-sm text-white font-geist">
+                <iconify-icon icon="solar:check-circle-linear" class="text-teal-500"></iconify-icon>
+                <span>12+ hours of weekly cognitive bandwidth reclaimed</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <section class="border-dashed z-10 bg-[#05080A] border-white/10 border-b relative" style="">
+
+          <div class="grid grid-cols-1 md:grid-cols-12 border-dashed border-white/10 border-b" style="">
+            <div
+              class="col-span-12 md:col-span-4 md:p-12 md:border-b-0 md:border-r border-dashed flex flex-col border-white/10 border-b pt-8 pr-8 pb-8 pl-8 justify-center reveal-on-scroll"
+              style="">
+              <div class="flex items-center gap-2 mb-4">
+                <iconify-icon icon="solar:magic-stick-3-linear" class="w-4 h-4 text-slate-500" style=""></iconify-icon>
+                <span class="font-mono text-xs tracking-widest uppercase font-geist text-slate-500" style="">
+                  Core Philosophy
+                </span>
+              </div>
+              <h2 class="text-3xl md:text-4xl text-white font-light tracking-tighter mb-4 font-geist reveal-on-scroll">
+                Don't replace. Orchestrate.
+              </h2>
+              <p class="text-sm leading-relaxed font-geist text-white/70 reveal-on-scroll" style="">
+                Styx aligns tools around your priorities—not the other way around. It sits on top of your existing
+                stack,
+                acting only within the rules you define.
+              </p>
+            </div>
+
+            <div
+              class="col-span-12 md:col-span-8 grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-dashed divide-white/10 reveal-on-scroll">
+              <!-- Feature 1 -->
+              <div class="p-8 group hover:bg-white/[0.02] transition-colors relative overflow-hidden reveal-on-scroll"
+                style="">
+                <div
+                  class="mb-6 relative h-24 w-full bg-slate-900/50 rounded border border-white/5 flex flex-col p-3 overflow-hidden"
+                  style="">
+                  <!-- Abstract Chart -->
+                  <svg class="w-full h-full text-slate-600" viewBox="0 0 100 40" preserveAspectRatio="none" style="">
+                    <path d="M0 40 L10 35 L20 38 L30 30 L40 32 L50 20 L60 25 L70 15 L80 18 L90 5 L100 10" fill="none"
+                      stroke="currentColor" stroke-width="0.5" class="animate-graph-stroke"></path>
+                    <path d="M0 40 L10 35 L20 38 L30 30 L40 32 L50 20 L60 25 L70 15 L80 18 L90 5 L100 10 L100 40 L0 40"
+                      fill="url(#grad1)" opacity="0.2" class="animate-graph-fill"></path>
+                    <defs>
+                      <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#64748b;stop-opacity:1;"></stop>
+                        <stop offset="100%" style="stop-color:#000000;stop-opacity:0;"></stop>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <!-- Glow -->
+                  <div
+                    class="absolute -right-4 -bottom-4 w-24 h-24 bg-[#64748b]/10 blur-[40px] rounded-full group-hover:bg-[#64748b]/20 transition-colors">
+                  </div>
+                </div>
+                <h3 class="text-white font-medium mb-2 flex items-center gap-2 font-geist reveal-on-scroll">
+                  Task Automation Layer
+                </h3>
+                <p class="text-xs leading-relaxed font-geist reveal-on-scroll" style="">
+                  From email triage to ticket creation, Styx compresses five fragmented steps into one approved action.
+                </p>
+              </div>
+
+              <!-- Feature 2 -->
+              <div class="p-8 group hover:bg-white/[0.02] transition-colors relative overflow-hidden reveal-on-scroll"
+                style="">
+                <div class="mb-6 relative h-24 w-full flex items-center justify-center">
+                  <!-- Visual Nodes -->
+                  <div class="relative w-full h-full flex items-center justify-center">
+                    <div class="absolute w-24 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent">
+                    </div>
+                    <div class="absolute h-16 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"
+                      style=""></div>
+                    <div
+                      class="w-8 h-8 rounded bg-[#0E1216] border border-white/10 flex items-center justify-center relative z-10 shadow-[0_0_15px_rgba(198,249,31,0.1)]"
+                      style="">
+                      <iconify-icon icon="solar:cpu-linear" class="w-4 h-4 text-white anim-pulse-subtle"></iconify-icon>
+                    </div>
+                    <div class="absolute top-4 right-10 w-2 h-2 rounded-full animate-pulse bg-teal-500" style=""></div>
+                  </div>
+                </div>
+                <h3 class="text-white font-medium mb-2 flex items-center gap-2 font-geist reveal-on-scroll">
+                  Workflow Orchestrator
+                </h3>
+                <p class="text-xs leading-relaxed font-geist text-white/70 reveal-on-scroll" style="">
+                  Connects your siloed apps. Updates Linear and notifies Notion automatically, preventing 90% of manual
+                  data entry.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-dashed divide-white/10 border-dashed border-white/10 border-b"
+            style="">
+            <!-- Mini Feature 1 -->
+            <div
+              class="flex flex-col gap-4 group hover:bg-white/[0.03] transition-all duration-500 pt-8 pr-8 pb-8 pl-8 reveal-on-scroll relative overflow-hidden"
+              style="">
+              <!-- Icon Background Glow -->
+              <div
+                class="absolute -top-10 -left-10 w-24 h-24 bg-teal-500/10 blur-[40px] rounded-full group-hover:bg-teal-500/20 transition-all duration-500">
+              </div>
+
+              <div class="relative z-10 space-y-4">
+                <div
+                  class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-teal-500/50 group-hover:bg-teal-500/5 transition-all duration-500">
+                  <iconify-icon icon="solar:layers-bold-duotone"
+                    class="w-6 h-6 text-slate-400 group-hover:text-secondary transition-colors anim-float"
+                    style=""></iconify-icon>
+                </div>
+                <div class="">
+                  <h4 class="text-white text-sm font-semibold font-geist">
+                    Unified Stack
+                  </h4>
+                  <p class="text-[10px] text-slate-500 mt-1 font-geist reveal-on-scroll leading-relaxed" style="">
+                    All your tools in one view.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mini Feature 2 -->
+            <div
+              class="p-8 flex flex-col gap-4 group hover:bg-white/[0.03] transition-all duration-500 pt-8 pr-8 pb-8 pl-8 reveal-on-scroll relative overflow-hidden"
+              style="">
+              <div
+                class="absolute -top-10 -left-10 w-24 h-24 bg-teal-500/10 blur-[40px] rounded-full group-hover:bg-teal-500/20 transition-all duration-500">
+              </div>
+
+              <div class="relative z-10 space-y-4">
+                <div
+                  class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-teal-500/50 group-hover:bg-teal-500/5 transition-all duration-500">
+                  <iconify-icon icon="solar:shield-keyhole-bold-duotone"
+                    class="w-6 h-6 text-slate-400 group-hover:text-secondary transition-colors anim-pulse-subtle"
+                    style=""></iconify-icon>
+                </div>
+                <div class="">
+                  <h4 class="text-white text-sm font-semibold font-geist">
+                    Enterprise Secure
+                  </h4>
+                  <p class="text-[10px] text-slate-500 mt-1 font-geist reveal-on-scroll leading-relaxed" style="">
+                    SOC2 Compliant &amp; Encrypted.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mini Feature 3 -->
+            <div
+              class="p-8 flex flex-col gap-4 group hover:bg-white/[0.03] transition-all duration-500 pt-8 pr-8 pb-8 pl-8 reveal-on-scroll relative overflow-hidden"
+              style="">
+              <div
+                class="absolute -top-10 -left-10 w-24 h-24 bg-teal-500/10 blur-[40px] rounded-full group-hover:bg-teal-500/20 transition-all duration-500">
+              </div>
+
+              <div class="relative z-10 space-y-4">
+                <div
+                  class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-teal-500/50 group-hover:bg-teal-500/5 transition-all duration-500">
+                  <iconify-icon icon="solar:globus-bold-duotone"
+                    class="w-6 h-6 text-slate-400 group-hover:text-secondary transition-colors anim-spin-slow"
+                    style=""></iconify-icon>
+                </div>
+                <div class="">
+                  <h4 class="text-white text-sm font-semibold font-geist">
+                    Context Aware
+                  </h4>
+                  <p class="text-[10px] text-slate-500 mt-1 font-geist reveal-on-scroll leading-relaxed" style="">
+                    Understands your projects.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mini Feature 4 -->
+            <div
+              class="p-8 flex flex-col gap-4 group hover:bg-white/[0.03] transition-all duration-500 pt-8 pr-8 pb-8 pl-8 reveal-on-scroll relative overflow-hidden"
+              style="">
+              <div
+                class="absolute -top-10 -left-10 w-24 h-24 bg-teal-500/10 blur-[40px] rounded-full group-hover:bg-teal-500/20 transition-all duration-500">
+              </div>
+
+              <div class="relative z-10 space-y-4">
+                <div
+                  class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-teal-500/50 group-hover:bg-teal-500/5 transition-all duration-500">
+                  <iconify-icon icon="solar:flash-drive-bold-duotone"
+                    class="w-6 h-6 text-slate-400 group-hover:text-secondary transition-colors anim-wiggle"
+                    style=""></iconify-icon>
+                </div>
+                <div class="">
+                  <h4 class="text-white text-sm font-semibold font-geist">
+                    Instant Setup
+                  </h4>
+                  <p class="text-[10px] text-slate-500 mt-1 font-geist reveal-on-scroll leading-relaxed" style="">
+                    Connects in seconds.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+
+
+    <!-- Demo Video Section -->
+    <section id="demo-video"
+      class="border-dashed bg-[#05080A] border-white/10 border-b pt-24 pb-24 relative overflow-hidden">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16 reveal-on-scroll">
+          <div class="flex items-center justify-center gap-3 mb-4">
+            <span class="w-12 h-px bg-white/10"></span>
+            <span class="text-[10px] uppercase tracking-[0.4em] font-geist font-bold text-slate-500">System
+              Demonstration</span>
+            <span class="w-12 h-px bg-white/10"></span>
+          </div>
+          <h2 class="text-4xl md:text-5xl text-white font-light tracking-tighter mb-6 font-geist">Experience the
+            Orchestration.</h2>
+          <p class="text-white/60 font-geist text-sm max-w-2xl mx-auto leading-relaxed">
+            Watch how Styx AI transforms chaotic tool noise into a unified stream of verified outcomes.
+            See why leading founders are reclaiming 12+ hours of their week.
+          </p>
+        </div>
+
+        <div class="relative group reveal-on-scroll">
+          <!-- Video Frame -->
+          <div class="video-container aspect-video relative z-10 bg-slate-900 shadow-2xl">
+            <video id="demo-video-player"
+              class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
+              preload="metadata" muted playsinline loop>
+              <source src="rowzd837annraukcew5z_1_etvnrw.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+
+            <!-- Overlay Content -->
+            <div id="video-overlay" class="absolute inset-0 flex items-center justify-center cursor-pointer z-20">
+              <div class="play-button" id="play-btn">
+                <iconify-icon icon="solar:play-bold"></iconify-icon>
+              </div>
+            </div>
+
+            <!-- Dashboard Frame Overlay -->
+            <div class="absolute inset-0 border-[12px] border-[#0E1216] pointer-events-none z-30"></div>
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-[#05080A] via-transparent to-transparent opacity-40 pointer-events-none z-25">
+            </div>
+          </div>
+
+          <!-- Decorative Glows -->
+          <div class="absolute -top-20 -left-20 w-80 h-80 bg-secondary/5 blur-[120px] -z-0"></div>
+          <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-[#64748b]/10 blur-[120px] -z-0"></div>
+
+          <!-- Floating Metrics -->
+          <div
+            class="absolute top-10 -right-4 md:-right-10 z-20 bg-black/60 backdrop-blur-md border border-white/10 p-4 rounded-sm animate-float hidden md:block">
+            <div class="flex items-center gap-3">
+              <div class="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+              <span class="text-[10px] font-geist font-bold text-white tracking-widest uppercase">Live Tracking</span>
+            </div>
+            <div class="mt-2 text-xl font-light text-white font-geist">-12.4h <span
+                class="text-[9px] text-slate-500">Saved/Wk</span></div>
+          </div>
+
+          <div
+            class="absolute bottom-20 -left-4 md:-left-10 z-20 bg-black/60 backdrop-blur-md border border-white/10 p-4 rounded-sm animate-float hidden md:block"
+            style="animation-delay: 1.5s;">
+            <div class="flex items-center gap-3">
+              <iconify-icon icon="solar:bolt-bold" class="text-secondary"></iconify-icon>
+              <span class="text-[10px] font-geist font-bold text-white tracking-widest uppercase">System Load</span>
+            </div>
+            <div class="mt-2 text-xl font-light text-white font-geist">0.03s <span
+                class="text-[9px] text-slate-500">Latency</span></div>
+          </div>
+        </div>
+
+        <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 reveal-on-scroll">
+          <div class="text-center">
+            <div class="text-2xl text-white font-light font-geist mb-1">99.9%</div>
+            <div class="text-[9px] text-slate-500 uppercase tracking-widest font-geist">Uptime Sync</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl text-white font-light font-geist mb-1">15+</div>
+            <div class="text-[9px] text-slate-500 uppercase tracking-widest font-geist">Connected Apps</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl text-white font-light font-geist mb-1">SOC2</div>
+            <div class="text-[9px] text-slate-500 uppercase tracking-widest font-geist">Type II Certified</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl text-white font-light font-geist mb-1">24/7</div>
+            <div class="text-[9px] text-slate-500 uppercase tracking-widest font-geist">Autonomous Monitoring</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- Core Features / "Why Us" Section -->
+    <section id="capabilities" class="border-dashed bg-[#05080A] border-white/10 border-b pt-24 pb-24">
+      <div class="max-w-6xl mr-auto ml-auto pr-6 pl-6">
+        <div class="mb-16 relative">
+          <div class="absolute -top-12 -left-12 w-32 h-32 bg-[#64748b]/5 rounded-full blur-3xl" aria-hidden="true">
+          </div>
+
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8 z-10 relative gap-x-8 gap-y-8">
+            <div class="max-w-2xl">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="uppercase text-xs font-semibold tracking-widest font-geist text-slate-500" style="">
+                  02. Capabilities
+                </span>
+              </div>
+
+              <h2
+                class="text-4xl md:text-5xl lg:text-6xl text-white font-light tracking-tighter mb-4 font-geist leading-[1.1] reveal-on-scroll">
+                Orchestration,
+                <span class="">not just automation.</span>
+              </h2>
+
+              <p class="text-lg font-geist max-w-md text-white/70 reveal-on-scroll" style="">
+                Styx doesn't just 'do' things. It observes, weights, and executes based on the logic of your specific
+                business goals.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-12 h-[1px] w-full bg-gradient-to-r from-slate-800 via-slate-700 to-transparent" style=""></div>
+        </div>
+        <section class="z-10 relative" style="">
+          <!-- Top Row Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+            <!-- Top Left: Radar -->
+            <div class="col-span-12 md:col-span-4 bento-card h-[300px] md:h-[400px] reveal-on-scroll">
+              <div class="bento-glow"></div>
+              <!-- Asset -->
+              <div class="absolute inset-0 opacity-20 filter grayscale hover:grayscale-0 transition-all duration-700">
+                <img
+                  src="C:/Users/HP/.gemini/antigravity/brain/a8c6c3aa-e633-458b-844f-844ccf220688/workflow_sentinel_asset_1770066260655.png"
+                  class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-700"
+                  alt="Workflow Sentinel">
+              </div>
+
+              <!-- Content -->
+              <div
+                class="absolute inset-0 p-10 flex flex-col justify-end bg-gradient-to-t from-[#05080A] via-transparent to-transparent">
+                <div class="flex items-center gap-2 mb-4">
+                  <div class="w-1.5 h-1.5 rounded-full bg-secondary glow-pulse"></div>
+                  <span class="text-[9px] uppercase tracking-[0.2em] font-geist font-bold text-slate-500">System
+                    Surveillance</span>
+                </div>
+                <h3 class="text-white font-medium text-2xl mb-3 font-geist tracking-tight">Signal Detection</h3>
+                <p class="text-xs leading-relaxed font-geist text-white/50 max-w-xs">
+                  Observe tool activity, identify systemic friction, and surface the one decision that matters.
+                </p>
+              </div>
+            </div>
+
+            <!-- Top Middle: Alerts -->
+            <div
+              class="col-span-12 md:col-span-5 bento-card p-10 flex flex-col h-[300px] md:h-[400px] reveal-on-scroll">
+              <div class="bento-glow"></div>
+              <div class="mb-12">
+                <div class="flex items-center gap-2 mb-4">
+                  <iconify-icon icon="solar:bolt-circle-linear" class="text-secondary h-4 w-4"></iconify-icon>
+                  <span class="text-[9px] uppercase tracking-[0.2em] font-geist font-bold text-slate-500">Autonomous
+                    Prioritization</span>
+                </div>
+                <h3 class="text-white font-medium text-2xl mb-3 font-geist tracking-tight">Decision Compression</h3>
+                <p class="text-xs leading-relaxed font-geist text-white/50">
+                  Weighs 50+ data points by urgency. Suppresses low-impact alerts automatically so you only see the
+                  signal.
+                </p>
+              </div>
+
+              <div class="flex-1 space-y-5">
+                <!-- Alert Item 1 -->
+                <div class="group/item reveal-on-scroll">
+                  <div class="flex items-center justify-between mb-2 text-[10px] font-geist tracking-wide">
+                    <span class="text-white/70">Investor Update Cycle</span>
+                    <span class="text-secondary font-bold">READY</span>
+                  </div>
+                  <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div
+                      class="h-full w-[95%] bg-secondary shadow-[0_0_10px_rgba(20,184,166,0.3)] transition-all duration-1000">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Alert Item 2 -->
+                <div class="group/item reveal-on-scroll" style="transition-delay: 100ms;">
+                  <div class="flex items-center justify-between mb-2 text-[10px] font-geist tracking-wide">
+                    <span class="text-white/50">Neural Link Sync</span>
+                    <span class="text-white/30">PENDING</span>
+                  </div>
+                  <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div class="h-full w-[40%] bg-white/20 transition-all duration-1000"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Top Right: Small Grid -->
+            <div class="col-span-12 md:col-span-3 bento-card p-6 flex flex-col h-[300px] md:h-[400px] reveal-on-scroll">
+              <div class="bento-glow"></div>
+              <div
+                class="relative flex-1 rounded-lg bg-white/[0.01] border border-white/5 overflow-hidden flex items-center justify-center">
+                <div class="absolute inset-0 opacity-20">
+                  <div
+                    class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-gradient-to-r from-transparent via-secondary to-transparent">
+                  </div>
+                  <div
+                    class="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-gradient-to-b from-transparent via-secondary to-transparent">
+                  </div>
+                </div>
+
+                <div class="z-10 relative flex items-center justify-center">
+                  <!-- Pulse Rings -->
+                  <div
+                    class="absolute w-24 h-24 rounded-full border border-secondary/20 animate-[ping_3s_infinite] opacity-50">
+                  </div>
+                  <div
+                    class="absolute w-32 h-32 rounded-full border border-secondary/10 animate-[ping_4s_infinite] opacity-20">
+                  </div>
+
+                  <div
+                    class="p-6 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur-xl shadow-[0_0_30px_rgba(20,184,166,0.2)] animate-float">
+                    <iconify-icon icon="solar:atom-bold-duotone" class="w-12 h-12 text-secondary"
+                      style="filter: drop-shadow(0 0 10px rgba(20, 184, 166, 0.6));"></iconify-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="pt-8 text-center">
+                <h4 class="text-white font-medium text-sm mb-2 font-geist">Core Engine</h4>
+                <p class="text-[10px] text-white/40 font-geist tracking-wide">Custom deterministic logic layer.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <!-- Universal Sync -->
+            <div class="col-span-12 md:col-span-8 bento-card h-[300px] md:h-[350px] overflow-hidden reveal-on-scroll">
+              <div class="bento-glow"></div>
+              <div class="absolute inset-0 opacity-10">
+                <img
+                  src="C:/Users/HP/.gemini/antigravity/brain/a8c6c3aa-e633-458b-844f-844ccf220688/universal_sync_asset_1770066303224.png"
+                  class="w-full h-full object-cover" alt="Universal Sync">
+              </div>
+              <!-- Content -->
+              <div
+                class="absolute inset-0 p-10 flex flex-col justify-between bg-gradient-to-r from-[#05080A] via-transparent to-transparent">
+                <div class="max-w-md">
+                  <span
+                    class="text-[9px] uppercase tracking-[0.2em] font-geist font-bold text-slate-500 mb-4 block">Neural
+                    Connectivity</span>
+                  <h3 class="text-white font-medium text-3xl mb-4 font-geist tracking-tight">Bridges the Tool Gap</h3>
+                  <p class="text-xs leading-relaxed font-geist text-white/50 max-w-sm">
+                    Synchronize your calendars, emails, and project managers into a unified neural network of work. Zero
+                    latency coordination.
+                  </p>
+                </div>
+                <div class="flex gap-6">
+                  <iconify-icon icon="logos:google-gmail"
+                    class="w-5 h-5 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all"></iconify-icon>
+                  <iconify-icon icon="logos:slack-icon"
+                    class="w-5 h-5 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all"></iconify-icon>
+                  <iconify-icon icon="logos:notion-icon"
+                    class="w-5 h-5 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all"></iconify-icon>
+                  <iconify-icon icon="logos:jira"
+                    class="w-5 h-5 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all"></iconify-icon>
+                </div>
+              </div>
+            </div>
+
+            <!-- Growth Section -->
+            <div
+              class="col-span-12 md:col-span-4 bento-card p-10 flex flex-col justify-center h-[250px] md:h-[350px] reveal-on-scroll">
+              <div class="bento-glow"></div>
+              <div class="text-[72px] leading-none font-light tracking-tighter font-geist mb-4 text-secondary"
+                style="text-shadow: 0 0-40px rgba(20, 184, 166, 0.2);">
+                +12h
+              </div>
+              <h3 class="text-white font-medium text-lg mb-2 uppercase tracking-widest font-geist">Weekly Bandwidth</h3>
+              <p class="text-xs leading-relaxed font-geist text-white/40">
+                Strategic focus reclaimed through autonomous management.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Narrative Workflow Section -->
+        <section class="border-dashed bg-[#05080A] border-white/10 border-b pt-32 pb-32 relative overflow-hidden">
+          <div class="max-w-6xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+              <div class="reveal-on-scroll">
+                <div class="flex items-center gap-3 mb-6">
+                  <span class="w-8 h-[1px] bg-secondary"></span>
+                  <span class="text-[10px] uppercase tracking-[0.3em] font-geist font-bold text-slate-500">Operational
+                    Narrative</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl text-white font-light tracking-tighter mb-8 font-geist leading-tight">
+                  The Monday morning shift.</h2>
+                <div class="space-y-8 text-white/70 font-geist leading-relaxed">
+                  <p class="text-lg text-white/50 border-l border-white/10 pl-6 italic">
+                    It’s 8:00 AM. 17 Slack pings, 6 Jira tickets, and 3 calendar conflicts are waiting for you.
+                    Normally, you’d spend the first 90 minutes sorting them.
+                  </p>
+                  <p class="text-white font-medium tracking-tight">
+                    With Styx, the sequence is autonomous:
+                  </p>
+                  <div class="space-y-6">
+                    <div class="flex items-start gap-4 group/narrative">
+                      <span
+                        class="text-secondary font-mono text-sm pt-0.5 group-hover:scale-110 transition-transform">01.</span>
+                      <p class="text-sm group-hover:text-white transition-colors">Styx detects the Jira surge and
+                        cross-references it with your Notion roadmap.</p>
+                    </div>
+                    <div class="flex items-start gap-4 group/narrative">
+                      <span
+                        class="text-secondary font-mono text-sm pt-0.5 group-hover:scale-110 transition-transform">02.</span>
+                      <p class="text-sm group-hover:text-white transition-colors">It pauses low-impact Slack pings and
+                        drafts a summary of the 3 most critical threads.</p>
+                    </div>
+                    <div class="flex items-start gap-4 group/narrative">
+                      <span
+                        class="text-secondary font-mono text-sm pt-0.5 group-hover:scale-110 transition-transform">03.</span>
+                      <p class="text-sm group-hover:text-white transition-colors">It reschedules your 10 AM sync because
+                        it identified a blocker that makes the meeting premature.</p>
+                    </div>
+                  </div>
+                  <div class="pt-8 border-t border-dashed border-white/10">
+                    <p class="text-secondary text-sm font-medium italic">
+                      "Styx resolves the priorities before you even open your laptop."
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="relative reveal-on-scroll">
+                <div
+                  class="bg-white/[0.03] border border-white/20 rounded-2xl p-10 backdrop-blur-xl relative z-10 shadow-2xl">
+                  <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center border border-secondary/20 shadow-[0_0_15px_rgba(20,184,166,0.1)]">
+                        <iconify-icon icon="solar:history-bold-duotone" class="text-secondary w-6 h-6"></iconify-icon>
+                      </div>
+                      <div>
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">System
+                          Log</span>
+                        <span class="text-xs font-geist text-white">Monday 08:00:04 AM</span>
+                      </div>
+                    </div>
+                    <div
+                      class="text-[10px] font-mono text-secondary px-2 py-1 bg-secondary/5 border border-secondary/10 rounded">
+                      SYNC_ACTIVE</div>
+                  </div>
+                  <div class="space-y-5">
+                    <div
+                      class="p-5 bg-white/[0.02] rounded-xl border border-white/5 hover:border-secondary/30 transition-all group relative overflow-hidden">
+                      <div class="absolute inset-0 bg-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      </div>
+                      <div class="flex items-center justify-between mb-2 relative z-10">
+                        <div class="text-[9px] text-secondary font-bold tracking-[0.2em]">ORCHESTRATOR</div>
+                        <iconify-icon icon="solar:check-circle-bold-duotone"
+                          class="text-secondary w-4 h-4 opacity-0 group-hover:opacity-100 transition-all transform group-hover:scale-110"></iconify-icon>
+                      </div>
+                      <div class="text-[11px] text-white/80 leading-relaxed relative z-10">Identified 3 high-impact
+                        blockers in
+                        Linear. Correlated with Slack thread #frontend. Summary drafted.</div>
+                    </div>
+                    <div
+                      class="p-5 bg-white/[0.02] rounded-xl border border-white/5 hover:border-secondary/30 transition-all group relative overflow-hidden">
+                      <div class="absolute inset-0 bg-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      </div>
+                      <div class="flex items-center justify-between mb-2 relative z-10">
+                        <div class="text-[9px] text-[#64748b] font-bold tracking-[0.2em]">LOGIC_ENGINE</div>
+                        <iconify-icon icon="solar:check-circle-bold-duotone"
+                          class="text-secondary w-4 h-4 opacity-0 group-hover:opacity-100 transition-all transform group-hover:scale-110"></iconify-icon>
+                      </div>
+                      <div class="text-[11px] text-white/80 leading-relaxed relative z-10">Declined 2 recurring
+                        meetings. Reason:
+                        Critical path dependencies unresolved in PR #421.</div>
+                    </div>
+                    <div
+                      class="p-5 bg-white/[0.02] rounded-xl border border-white/5 hover:border-secondary/30 transition-all group">
+                      <div class="flex items-center justify-between mb-2">
+                        <div class="text-[9px] text-white/30 font-bold tracking-[0.2em]">NETWORK_SHIELD</div>
+                        <iconify-icon icon="solar:check-circle-bold"
+                          class="text-secondary w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity"></iconify-icon>
+                      </div>
+                      <div class="text-[11px] text-white/80 leading-relaxed">Silenced 12 non-critical channels for deep
+                        work focus. Threshold set to LEVEL_4.</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Decorative elements -->
+                <div class="absolute -top-10 -right-10 w-64 h-64 bg-secondary/5 blur-[100px] -z-0"></div>
+                <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-[#64748b]/5 blur-[80px] -z-0"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+
+
+    <!-- Comparison Table Section -->
+    <section class="border-dashed bg-[#05080A] border-white/10 border-b pt-24 pb-24">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="text-center mb-16 reveal-on-scroll">
+          <h2 class="text-3xl text-white font-light tracking-tighter mb-4 font-geist">The Orchestration Advantage.</h2>
+          <p class="text-slate-500 text-sm font-geist">Why teams are migrating from legacy automation to autonomous
+            systems.</p>
+        </div>
+
+        <div class="border border-dashed border-white/10 rounded-sm overflow-hidden bg-white/[0.02] reveal-on-scroll">
+          <div class="grid comparison-grid bg-white/5 p-6 border-b border-dashed border-white/10 comparison-header">
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-widest">Capability</div>
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-widest text-center">Legacy Automation</div>
+            <div
+              class="text-xs font-bold text-white uppercase tracking-widest text-center bg-secondary/10 py-1 rounded">
+              Styx Intelligence</div>
+          </div>
+
+          <div class="grid comparison-grid p-6 border-b border-dashed border-white/10 items-center gap-4 sm:gap-0">
+            <div class="text-sm text-white font-geist"><span
+                class="sm:hidden text-slate-500 text-[10px] block uppercase mb-1">Capability</span>Context Awareness
+            </div>
+            <div class="text-center sm:text-center text-xs text-slate-500"><span
+                class="sm:hidden text-slate-500 text-[10px] block uppercase mb-1">Legacy</span>None (Trigger-Action)
+            </div>
+            <div
+              class="text-center sm:text-center text-xs text-white bg-secondary/5 sm:bg-transparent py-2 sm:py-0 rounded">
+              <span class="sm:hidden text-secondary text-[10px] block uppercase mb-1">Styx</span>Full Cross-Tool Graph
+            </div>
+          </div>
+
+          <div class="grid comparison-grid p-6 border-b border-dashed border-white/10 items-center gap-4 sm:gap-0">
+            <div class="text-sm text-white font-geist"><span
+                class="sm:hidden text-slate-500 text-[10px] block uppercase mb-1">Capability</span>Conflict Resolution
+            </div>
+            <div class="text-center sm:text-center text-xs text-slate-500"><span
+                class="sm:hidden text-slate-500 text-[10px] block uppercase mb-1">Legacy</span>Manual Oversight</div>
+            <div
+              class="text-center sm:text-center text-xs text-white bg-secondary/5 sm:bg-transparent py-2 sm:py-0 rounded">
+              <span class="sm:hidden text-secondary text-[10px] block uppercase mb-1">Styx</span>Autonomous Policy-Based
+            </div>
+          </div>
+
+          <div class="grid comparison-grid p-6 border-b border-dashed border-white/10 items-center gap-4 sm:gap-0">
+            <div class="text-sm text-white font-geist"><span
+                class="sm:hidden text-slate-500 text-[10px] block uppercase mb-1">Capability</span>Decision Logic</div>
+            <div class="text-center sm:text-center text-xs text-slate-500"><span
+                class="sm:hidden text-slate-500 text-[10px] block uppercase mb-1">Legacy</span>Fixed If/Then Loops</div>
+            <div
+              class="text-center sm:text-center text-xs text-white bg-secondary/5 sm:bg-transparent py-2 sm:py-0 rounded">
+              <span class="sm:hidden text-secondary text-[10px] block uppercase mb-1">Styx</span>Dynamic Neural Logic
+            </div>
+          </div>
+
+          <div class="grid comparison-grid p-6 items-center bg-secondary/5 gap-4 sm:gap-0">
+            <div class="text-sm text-white font-bold font-geist"><span
+                class="sm:hidden text-slate-500 text-[10px] block uppercase mb-1">Capability</span>Setup Speed</div>
+            <div class="text-center sm:text-center text-xs text-slate-500"><span
+                class="sm:hidden text-slate-500 text-[10px] block uppercase mb-1">Legacy</span>Weeks of configuration
+            </div>
+            <div class="text-center sm:text-center text-xs text-white font-bold"><span
+                class="sm:hidden text-secondary text-[10px] block uppercase mb-1">Styx</span>Minutes (Auto-Map)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- How it Works Steps Section -->
+    <section id="how-it-works" class="border-dashed bg-[#05080A] border-white/10 border-b pt-24 pb-24" style="">
+      <div class="max-w-6xl mr-auto ml-auto pr-6 pl-6">
+        <div class="mb-16 relative">
+          <div class="absolute -top-12 -left-12 w-32 h-32 bg-[#64748b]/5 rounded-full blur-3xl" aria-hidden="true">
+          </div>
+
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8 z-10 relative gap-x-8 gap-y-8">
+            <div class="max-w-2xl">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="uppercase text-xs font-semibold tracking-widest font-geist text-slate-500" style="">
+                  03. How it Works
+                </span>
+              </div>
+
+              <h2
+                class="text-4xl md:text-5xl lg:text-6xl text-white font-light tracking-tighter mb-4 font-geist leading-[1.1] reveal-on-scroll">
+                Complexity
+                <span class="">simplified.</span>
+              </h2>
+
+              <p class="text-lg font-geist max-w-md text-white/70 reveal-on-scroll" style="">
+                Three simple steps to reclaim your cognitive bandwidth.
+              </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+              <a href="#"
+                class="group flex items-center gap-2 text-white font-geist transition-colors reveal-on-scroll hover:text-[#64748b]"
+                style="">
+                View full documentation
+                <iconify-icon icon="solar:arrow-right-linear"
+                  class="group-hover:translate-x-1 transition-transform"></iconify-icon>
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-12 h-[1px] w-full bg-gradient-to-r from-slate-800 via-slate-700 to-transparent" style=""></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch pt-4">
+          <!-- Step Card 1 -->
+          <div class="group relative flex h-full flex-col reveal-on-scroll">
+            <div
+              class="absolute -inset-0.5 bg-gradient-to-b from-secondary/30 via-secondary/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-md">
+            </div>
+            <div
+              class="relative flex-1 flex flex-col p-10 bg-[#05080A]/80 backdrop-blur-sm border border-white/10 rounded-2xl group-hover:border-secondary/40 transition-all duration-700 h-[420px] overflow-hidden">
+              <div
+                class="absolute top-8 right-10 text-7xl font-geist font-black text-white/[0.03] group-hover:text-secondary/[0.08] transition-all duration-700 transform group-hover:scale-110">
+                01</div>
+
+              <div class="flex items-center gap-2 mb-10 relative">
+                <div
+                  class="absolute -inset-4 bg-secondary/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                </div>
+                <div
+                  class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-secondary/50 group-hover:bg-secondary/10 group-hover:scale-110 transition-all duration-700 relative z-10 shadow-2xl">
+                  <iconify-icon icon="solar:link-bold-duotone"
+                    class="w-7 h-7 text-white group-hover:text-secondary transition-colors duration-500"></iconify-icon>
+                </div>
+              </div>
+
+              <h3 class="text-2xl font-semibold text-white mb-6 tracking-tight relative z-10">Connect Your Stack</h3>
+
+              <p class="text-sm leading-relaxed text-white/50 flex-1 relative z-10">
+                Grant Styx secure access to your daily tools—Slack, Gmail, Notion, Jira. One-click OAuth setup with
+                bank-grade encryption as standard.
+              </p>
+
+              <div class="mt-8 relative z-10">
+                <div
+                  class="flex items-center justify-between mb-3 text-[10px] font-bold tracking-[0.2em] text-slate-500">
+                  <span>INTEGRATION STATUS</span>
+                  <span class="text-secondary group-hover:animate-pulse">READY</span>
+                </div>
+                <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                  <div
+                    class="h-full w-full bg-secondary shadow-[0_0_15px_rgba(20,184,166,0.6)] transform translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-1000 cubic-bezier(0.2, 0.8, 0.2, 1)">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step Card 2 -->
+          <div class="group relative flex h-full flex-col reveal-on-scroll" style="transition-delay: 150ms;">
+            <div
+              class="absolute -inset-0.5 bg-gradient-to-b from-secondary/30 via-secondary/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-md">
+            </div>
+            <div
+              class="relative flex-1 flex flex-col p-10 bg-[#05080A]/80 backdrop-blur-sm border border-white/10 rounded-2xl group-hover:border-secondary/40 transition-all duration-700 h-[420px] overflow-hidden">
+              <div
+                class="absolute top-8 right-10 text-7xl font-geist font-black text-white/[0.03] group-hover:text-secondary/[0.08] transition-all duration-700 transform group-hover:scale-110">
+                02</div>
+
+              <div class="flex items-center gap-2 mb-10 relative">
+                <div
+                  class="absolute -inset-4 bg-secondary/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                </div>
+                <div
+                  class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-secondary/50 group-hover:bg-secondary/10 group-hover:scale-110 transition-all duration-700 relative z-10 shadow-2xl">
+                  <iconify-icon icon="solar:radar-bold-duotone"
+                    class="w-7 h-7 text-white group-hover:text-secondary transition-colors duration-500"></iconify-icon>
+                </div>
+              </div>
+
+              <h3 class="text-2xl font-semibold text-white mb-6 tracking-tight relative z-10">Neural Mapping</h3>
+
+              <p class="text-sm leading-relaxed text-white/50 flex-1 relative z-10">
+                Our engine builds a real-time semantic map of your workflow, identifying repetitive task loops and
+                context-switching bottlenecks automatically.
+              </p>
+
+              <div class="mt-8 relative z-10">
+                <div
+                  class="flex items-center justify-between mb-3 text-[10px] font-bold tracking-[0.2em] text-slate-500">
+                  <span>MAPPING BANDWIDTH</span>
+                  <span class="text-secondary animate-pulse text-[9px]">ANALYZING...</span>
+                </div>
+                <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                  <div class="h-full w-full bg-secondary shadow-[0_0_15px_rgba(20,184,166,0.6)] animate-shimmer"
+                    style="background: linear-gradient(90deg, #14b8a6 0%, #0d9488 50%, #14b8a6 100%); background-size: 200% 100%;">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step Card 3 -->
+          <div class="group relative flex h-full flex-col reveal-on-scroll" style="transition-delay: 300ms;">
+            <div
+              class="absolute -inset-0.5 bg-gradient-to-b from-secondary/30 via-secondary/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-md">
+            </div>
+            <div
+              class="relative flex-1 flex flex-col p-10 bg-[#05080A]/80 backdrop-blur-sm border border-white/10 rounded-2xl group-hover:border-secondary/40 transition-all duration-700 h-[420px] overflow-hidden">
+              <div
+                class="absolute top-8 right-10 text-7xl font-geist font-black text-white/[0.03] group-hover:text-secondary/[0.08] transition-all duration-700 transform group-hover:scale-110">
+                03</div>
+
+              <div class="flex items-center gap-2 mb-10 relative">
+                <div
+                  class="absolute -inset-4 bg-secondary/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                </div>
+                <div
+                  class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-secondary/50 group-hover:bg-secondary/10 group-hover:scale-110 transition-all duration-700 relative z-10 shadow-2xl">
+                  <iconify-icon icon="solar:bolt-bold-duotone"
+                    class="w-7 h-7 text-white group-hover:text-secondary transition-colors duration-500"></iconify-icon>
+                </div>
+              </div>
+
+              <h3 class="text-2xl font-semibold text-white mb-6 tracking-tight relative z-10">Autonomous Flow</h3>
+
+              <p class="text-sm leading-relaxed text-white/50 flex-1 relative z-10">
+                Styx begins orchestrating. Emails are prepared, tickets are updated, and your command center only shows
+                what requires high-level human intent.
+              </p>
+
+              <div class="mt-8 relative z-10">
+                <div
+                  class="flex items-center justify-between mb-3 text-[10px] font-bold tracking-[0.2em] text-slate-500">
+                  <span>CURRENT EFFICIENCY</span>
+                  <span class="text-secondary group-hover:scale-110 transition-transform">+42% LIFT</span>
+                </div>
+                <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                  <div
+                    class="h-full w-[85%] bg-secondary shadow-[0_0_15px_rgba(20,184,166,0.6)] transform translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-1000 cubic-bezier(0.2, 0.8, 0.2, 1) delay-300">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- System Integrity / Trust Section -->
+    <section class="border-dashed bg-[#05080A] border-white/10 border-b pt-24 pb-24">
+      <div class="max-w-6xl mx-auto px-6">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-12 border border-dashed border-white/10 p-12 rounded-sm bg-gradient-to-br from-white/[0.02] to-transparent">
+          <div class="reveal-on-scroll">
+            <span class="text-[10px] uppercase tracking-widest font-geist font-medium text-slate-500 mb-4 block">System
+              Integrity</span>
+            <h2 class="text-3xl text-white font-light tracking-tighter mb-6 font-geist">AI with boundaries.</h2>
+            <p class="text-white/60 font-geist text-sm leading-relaxed mb-8">
+              In an era of black-box automation, we prioritize controlled intelligence. Styx acts only within the rules,
+              permissions, and thresholds you define—ensuring it remains a multiplier of human intent.
+            </p>
+            <div class="space-y-4">
+              <div class="flex items-center gap-3 text-xs text-white font-geist">
+                <iconify-icon icon="solar:check-circle-linear" class="text-teal-500"></iconify-icon>
+                <span>Human-in-the-Loop approval for final actions</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-white font-geist">
+                <iconify-icon icon="solar:check-circle-linear" class="text-teal-500"></iconify-icon>
+                <span>Zero training on private user data</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-white font-geist">
+                <iconify-icon icon="solar:check-circle-linear" class="text-teal-500"></iconify-icon>
+                <span>Deterministic rules override AI logic</span>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 gap-4 reveal-on-scroll">
+            <div class="bg-white/5 p-6 rounded-lg border border-white/10 hover:border-white/20 transition-colors">
+              <h4 class="text-white font-medium mb-2 font-geist text-sm">What Styx Won't Do</h4>
+              <p class="text-[11px] text-white/50 font-geist leading-relaxed">
+                Styx will never delete data, send external communications to clients, or make financial decisions
+                without explicit, multi-factor authenticated human approval.
+              </p>
+            </div>
+            <div class="bg-white/5 p-6 rounded-lg border border-white/10 hover:border-white/20 transition-colors">
+              <h4 class="text-white font-medium mb-2 font-geist text-sm">Data Ownership</h4>
+              <p class="text-[11px] text-white/50 font-geist leading-relaxed">
+                Your tool data never leaves your infrastructure in a persistent state. Styx operates via encrypted
+                tokens and temporary context windows that expire after execution.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Security & Compliance Section -->
+    <section class="border-dashed bg-[#05080A] border-white/10 border-b pt-12 pb-12">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="flex flex-wrap justify-between items-center gap-8 opacity-40 hover:opacity-100 transition-opacity">
+          <div class="flex items-center gap-3">
+            <iconify-icon icon="solar:shield-check-bold" class="text-secondary w-6 h-6"></iconify-icon>
+            <span class="text-[10px] font-geist font-bold text-white uppercase tracking-widest">SOC 2 TYPE II
+              COMPLIANT</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <iconify-icon icon="solar:lock-password-bold" class="text-secondary w-6 h-6"></iconify-icon>
+            <span class="text-[10px] font-geist font-bold text-white uppercase tracking-widest">AES-256
+              ENCRYPTION</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <iconify-icon icon="solar:user-shield-bold" class="text-secondary w-6 h-6"></iconify-icon>
+            <span class="text-[10px] font-geist font-bold text-white uppercase tracking-widest">GDPR & CCPA READY</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <iconify-icon icon="solar:cloud-check-bold" class="text-secondary w-6 h-6"></iconify-icon>
+            <span class="text-[10px] font-geist font-bold text-white uppercase tracking-widest">ISO 27001
+              CERTIFIED</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="mb-16 relative">
+        <div class="absolute -top-12 -left-12 w-32 h-32 bg-[#64748b]/5 rounded-full blur-3xl" aria-hidden="true">
+        </div>
+
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8 z-10 relative gap-x-8 gap-y-8">
+          <div class="max-w-2xl">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="uppercase text-xs font-semibold tracking-widest font-geist text-slate-500" style="">
+                04. Get Started
+              </span>
+            </div>
+
+            <h2
+              class="text-4xl md:text-5xl lg:text-6xl text-white font-light tracking-tighter mb-4 font-geist leading-[1.1] reveal-on-scroll">
+              Ready to upgrade
+              <span class="">your workflow?</span>
+            </h2>
+
+            <p class="text-lg font-geist max-w-md text-white/70 reveal-on-scroll" style="">
+              Join thousands of high-performers who trust Styx to manage their digital lives.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-12 h-[1px] w-full bg-gradient-to-r from-slate-800 via-slate-700 to-transparent" style=""></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <!-- Card 1: Individuals -->
+        <div
+          class="flex flex-col group hover:bg-white/[0.04] transition-colors duration-300 h-full border-white/10 border rounded-none p-10 relative reveal-on-scroll"
+          style="">
+          <div
+            class="absolute -top-px -left-px w-4 h-4 border-t-2 border-l-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-slate-600"
+            style=""></div>
+          <div
+            class="absolute -top-px -right-px w-4 h-4 border-t-2 border-r-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-slate-600"
+            style=""></div>
+          <div
+            class="absolute -bottom-px -left-px w-4 h-4 border-b-2 border-l-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-slate-600"
+            style=""></div>
+          <div
+            class="absolute -bottom-px -right-px w-4 h-4 border-b-2 border-r-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-slate-600"
+            style=""></div>
+
+          <div class="mb-8">
+            <span
+              class="inline-block px-3 py-1 text-xs font-medium text-slate-300 border border-white/10 rounded bg-white/5 group-hover:text-secondary group-hover:border-secondary group-hover:bg-secondary/10 transition-colors duration-300 font-geist"
+              style="">
+              For Individuals
+            </span>
+          </div>
+          <div class="mb-2 flex items-baseline gap-1">
+            <span class="text-3xl font-medium text-white tracking-tight font-geist">
+              Styx Personal
+            </span>
+          </div>
+          <p class="text-white/70 text-sm mb-8 font-geist font-light reveal-on-scroll">
+            Perfect for founders, freelancers, and consultants who need clarity.
+          </p>
+          <button
+            class="w-full py-4 mb-10 rounded-lg border border-white/10 bg-transparent text-white group-hover:bg-secondary group-hover:text-white group-hover:border-secondary group-hover:shadow-[0_0_30px_rgba(20,184,166,0.3)] transition-all duration-300 text-sm font-bold font-geist reveal-on-scroll"
+            style="">
+            Start Free Trial
+          </button>
+          <div class="mt-auto">
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:check-circle-linear"
+                  class="text-white/70 w-5 h-5 flex-shrink-0"></iconify-icon>
+                <span class="text-white/70 text-sm font-light font-geist">Connect up to 5 apps</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:check-circle-linear"
+                  class="text-white/70 w-5 h-5 flex-shrink-0"></iconify-icon>
+                <span class="text-white/70 text-sm font-light font-geist">Personal AI Assistant</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 2: Teams -->
+        <div
+          class="flex flex-col group hover:bg-white/[0.04] transition-colors duration-300 h-full border-white/10 border rounded-none p-10 relative reveal-on-scroll"
+          style="">
+          <div
+            class="absolute -top-px -left-px w-4 h-4 border-t-2 border-l-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-slate-600"
+            style=""></div>
+          <div
+            class="absolute -top-px -right-px w-4 h-4 border-t-2 border-r-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-slate-600"
+            style=""></div>
+          <div
+            class="absolute -bottom-px -left-px w-4 h-4 border-b-2 border-l-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-slate-600"
+            style=""></div>
+          <div
+            class="absolute -bottom-px -right-px w-4 h-4 border-b-2 border-r-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-slate-600"
+            style=""></div>
+
+          <div class="mb-8">
+            <span
+              class="inline-block px-3 py-1 text-xs font-medium text-slate-300 border border-white/10 rounded bg-white/5 group-hover:text-secondary group-hover:border-secondary group-hover:bg-secondary/10 transition-colors duration-300 font-geist"
+              style="">
+              For Teams
+            </span>
+          </div>
+          <div class="mb-2 flex items-baseline gap-1">
+            <span class="text-3xl font-medium text-white tracking-tight font-geist">
+              Styx Enterprise
+            </span>
+          </div>
+          <p class="text-white/70 text-sm mb-8 font-geist font-light reveal-on-scroll">
+            Scalable orchestration for startups and agencies.
+          </p>
+          <button
+            class="w-full py-4 mb-10 rounded-lg border border-white/10 bg-transparent text-white group-hover:bg-secondary group-hover:text-white group-hover:border-secondary group-hover:shadow-[0_0_30px_rgba(20,184,166,0.3)] transition-all duration-300 text-sm font-bold font-geist reveal-on-scroll"
+            style="">
+            Contact Sales
+          </button>
+          <div class="mt-auto">
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:check-circle-linear"
+                  class="text-white/70 w-5 h-5 flex-shrink-0"></iconify-icon>
+                <span class="text-white/70 text-sm font-light font-geist">Unlimited Integrations</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <iconify-icon icon="solar:check-circle-linear"
+                  class="text-white/70 w-5 h-5 flex-shrink-0"></iconify-icon>
+                <span class="text-white/70 text-sm font-light font-geist">Team Analytics &amp; Insights</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Testimonials Section -->
+    <section class="border-dashed bg-[#05080A] border-white/10 border-b pt-32 pb-32 relative overflow-hidden">
+      <!-- Ambient Background Glows -->
+      <div class="absolute top-1/4 -left-20 w-96 h-96 bg-secondary/5 blur-[120px] rounded-full pointer-events-none">
+      </div>
+      <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#64748b]/5 blur-[120px] rounded-full pointer-events-none">
+      </div>
+
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-20 reveal-on-scroll">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 mb-6">
+            <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+            <span class="text-[10px] uppercase tracking-[0.2em] font-geist font-bold text-slate-400">System
+              Resonance</span>
+          </div>
+          <h2
+            class="text-3xl sm:text-4xl md:text-6xl text-white font-light tracking-tighter mb-6 font-geist leading-[1.1]">
+            Trusted by the <span class="italic font-normal text-secondary">next generation</span> of builders.
+          </h2>
+          <p class="text-white/40 font-geist max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+            Styx isn't just a tool—it's the competitive advantage for teams who refuse to be slowed down by operational
+            friction.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Testimonial Card 1 -->
+          <div class="bento-card p-10 flex flex-col h-full reveal-on-scroll">
+            <div class="bento-glow"></div>
+            <div class="flex-1">
+              <div class="flex justify-between items-center mb-10">
+                <span class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] font-geist">Logic
+                  Feedback</span>
+                <div class="flex gap-1">
+                  <div class="w-1 h-1 rounded-full bg-secondary/40"></div>
+                  <div class="w-1 h-1 rounded-full bg-secondary/40"></div>
+                  <div class="w-1 h-1 rounded-full bg-secondary"></div>
+                </div>
+              </div>
+
+              <div class="space-y-6 mb-12">
+                <!-- User Message -->
+                <div class="relative">
+                  <div class="absolute -left-4 top-2 w-[2px] h-full bg-secondary/20"></div>
+                  <p class="text-lg text-white font-geist leading-relaxed tracking-tight pl-2">
+                    "Styx fundamentally changed our ops. It's the first agent that feels <span
+                      class="text-secondary">deterministic</span> and reliable. We reclaimed 15h+/wk."
+                  </p>
+                </div>
+                <!-- Styx Reply -->
+                <div class="flex items-center gap-3 pt-6 border-t border-white/5">
+                  <div
+                    class="w-6 h-6 rounded-md bg-secondary/10 flex items-center justify-center border border-secondary/20">
+                    <iconify-icon icon="solar:bolt-bold" class="text-secondary w-3 h-3"></iconify-icon>
+                  </div>
+                  <span class="text-[10px] font-medium text-slate-500 font-geist">System optimized for Scale AI</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 pt-6 mt-auto">
+              <div
+                class="w-12 h-12 rounded-xl border border-white/10 overflow-hidden bg-slate-900 shadow-xl group-hover:border-secondary/30 transition-colors">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus" class="w-full h-full object-cover"
+                  alt="User">
+              </div>
+              <div class="font-geist">
+                <div class="text-[11px] font-bold text-white tracking-widest uppercase mb-0.5">Marcus Chen</div>
+                <div class="text-[9px] text-slate-600 font-medium uppercase tracking-wider">CTO at Scale AI</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial Card 2 -->
+          <div class="bento-card p-10 flex flex-col h-full reveal-on-scroll" style="transition-delay: 150ms;">
+            <div class="bento-glow"></div>
+            <div class="flex-1">
+              <div class="flex justify-between items-center mb-10">
+                <span class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] font-geist">Efficiency
+                  Report</span>
+                <iconify-icon icon="solar:verified-check-bold" class="text-secondary w-4 h-4"></iconify-icon>
+              </div>
+
+              <div class="space-y-6 mb-12">
+                <!-- User Message -->
+                <div
+                  class="bg-white/5 border border-white/10 p-6 rounded-2xl rounded-tl-none relative group-hover:bg-white/[0.07] transition-colors">
+                  <p class="text-[15px] text-white/90 font-geist leading-relaxed italic">
+                    "Styx eliminates the chaos of decision fatigue. It resolves priorities before I even open my laptop,
+                    giving me clear focus from minute one."
+                  </p>
+                </div>
+                <!-- Response -->
+                <div class="text-right">
+                  <span
+                    class="text-[10px] font-bold text-secondary uppercase tracking-widest px-3 py-1 bg-secondary/5 border border-secondary/10 rounded-full">Neural
+                    Sync Active</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 pt-6 mt-auto">
+              <div
+                class="w-12 h-12 rounded-xl border border-white/10 overflow-hidden bg-slate-900 shadow-xl group-hover:border-secondary/30 transition-colors">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-full h-full object-cover"
+                  alt="User">
+              </div>
+              <div class="font-geist">
+                <div class="text-[11px] font-bold text-white tracking-widest uppercase mb-0.5">Sarah Jenkins</div>
+                <div class="text-[9px] text-slate-600 font-medium uppercase tracking-wider">Engineering at Linear</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial Card 3 -->
+          <div class="bento-card p-10 flex flex-col h-full reveal-on-scroll" style="transition-delay: 300ms;">
+            <div class="bento-glow"></div>
+            <div class="flex-1">
+              <div class="flex justify-between items-center mb-10">
+                <span class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] font-geist">Growth
+                  Narrative</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-secondary"></span>
+                  <span class="text-[8px] font-bold text-slate-600 font-mono">LIVE_FEED</span>
+                </div>
+              </div>
+
+              <div class="mb-12">
+                <div class="text-4xl font-geist font-light text-white mb-6 leading-none">+12h<span
+                    class="text-sm text-secondary ml-2">/wk</span></div>
+                <p class="text-[15px] text-white/60 font-geist leading-relaxed">
+                  "Founders need headspace, not more tasks. Styx is the only platform that understands the <span
+                    class="text-white">cognitive tax</span> of context switching."
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 pt-6 mt-auto border-t border-white/5">
+              <div
+                class="w-12 h-12 rounded-xl border border-white/10 overflow-hidden bg-slate-900 shadow-xl group-hover:border-secondary/30 transition-colors">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ruben" class="w-full h-full object-cover"
+                  alt="User">
+              </div>
+              <div class="font-geist">
+                <div class="text-[11px] font-bold text-white tracking-widest uppercase mb-0.5">Ruben Hassid</div>
+                <div class="text-[9px] text-slate-600 font-medium uppercase tracking-wider">Founder of EasyGen</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="border-dashed bg-[#05080A] border-white/10 border-b pt-32 pb-32">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="mb-20 reveal-on-scroll">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-[1px] bg-secondary"></span>
+            <span class="text-[10px] uppercase tracking-[0.3em] font-geist font-bold text-slate-500">Intelligence
+              Briefing</span>
+          </div>
+          <h2 class="text-4xl md:text-5xl text-white font-light tracking-tighter mb-8 font-geist leading-tight">
+            Frequently Asked Questions</h2>
+        </div>
+
+        <div class="border-t border-white/10">
+          <!-- FAQ 1 -->
+          <div class="faq-item group py-8 reveal-on-scroll" onclick="toggleFAQ(this)">
+            <div class="flex items-start justify-between gap-6 cursor-pointer">
+              <h3
+                class="text-xl md:text-2xl text-white/80 font-light font-geist group-hover:text-white transition-colors">
+                How exactly does the data encryption work?</h3>
+              <div
+                class="faq-icon w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-secondary transition-all">
+                <iconify-icon icon="solar:alt-arrow-down-linear"
+                  class="text-white/30 group-hover:text-secondary transition-all"></iconify-icon>
+              </div>
+            </div>
+            <div class="faq-content mt-0 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <p class="pt-6 text-white/40 font-geist leading-relaxed text-sm md:text-base pr-12">
+                We use AES-256 bank-grade encryption at rest and TLS 1.3 in transit. Styx operates using ephemeral
+                context windows—meaning your data is processed, orchestrated, and then permanently cleared from our
+                memory registers.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="faq-item group py-8 reveal-on-scroll" style="transition-delay: 100ms;" onclick="toggleFAQ(this)">
+            <div class="flex items-start justify-between gap-6 cursor-pointer">
+              <h3
+                class="text-xl md:text-2xl text-white/80 font-light font-geist group-hover:text-white transition-colors">
+                Does it actually support my entire tech stack?</h3>
+              <div
+                class="faq-icon w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-secondary transition-all">
+                <iconify-icon icon="solar:alt-arrow-down-linear"
+                  class="text-white/30 group-hover:text-secondary transition-all"></iconify-icon>
+              </div>
+            </div>
+            <div class="faq-content mt-0 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <p class="pt-6 text-white/40 font-geist leading-relaxed text-sm md:text-base pr-12">
+                Styx integrates with 1,200+ applications via OAuth, API, and webhook. If your tool has a digital
+                heartbeat, Styx can orchestrate it. From legacy ERPs to modern AI wrappers.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="faq-item group py-8 reveal-on-scroll" style="transition-delay: 200ms;" onclick="toggleFAQ(this)">
+            <div class="flex items-start justify-between gap-6 cursor-pointer">
+              <h3
+                class="text-xl md:text-2xl text-white/80 font-light font-geist group-hover:text-white transition-colors">
+                How 'autonomous' is the orchestration?</h3>
+              <div
+                class="faq-icon w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-secondary transition-all">
+                <iconify-icon icon="solar:alt-arrow-down-linear"
+                  class="text-white/30 group-hover:text-secondary transition-all"></iconify-icon>
+              </div>
+            </div>
+            <div class="faq-content mt-0 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <p class="pt-6 text-white/40 font-geist leading-relaxed text-sm md:text-base pr-12">
+                Styx operates on a human-defined threshold. You can set it to "Full Autonomy" for repetitive low-risk
+                tasks, or "Review Required" for high-impact decisions like client communications or budget allocation.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="faq-item group py-8 reveal-on-scroll" style="transition-delay: 300ms;" onclick="toggleFAQ(this)">
+            <div class="flex items-start justify-between gap-6 cursor-pointer">
+              <h3
+                class="text-xl md:text-2xl text-white/80 font-light font-geist group-hover:text-white transition-colors">
+                Is there a setup fee for enterprise teams?</h3>
+              <div
+                class="faq-icon w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-secondary transition-all">
+                <iconify-icon icon="solar:alt-arrow-down-linear"
+                  class="text-white/30 group-hover:text-secondary transition-all"></iconify-icon>
+              </div>
+            </div>
+            <div class="faq-content mt-0 max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <p class="pt-6 text-white/40 font-geist leading-relaxed text-sm md:text-base pr-12">
+                No setup fees. We provide a dedicated solutions engineer for all Enterprise trials to help map your
+                first 3 complex logic flows at no additional cost.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="border-dashed bg-[#05080A] border-white/10 border-t pt-20 pb-10" style="">
+      <div class="max-w-6xl mx-auto w-full flex flex-col font-geist">
+        <!-- Top Section: Green -->
+        <div
+          class="relative text-black w-full overflow-hidden border-x border-t border-dashed border-white/10 bg-teal-500"
+          style="">
+          <!-- Grid Pattern Overlay -->
+          <div class="absolute inset-0 grid grid-cols-4 w-full h-full pointer-events-none">
+            <div class="border-r border-dashed border-black/10 h-full"></div>
+            <div class="border-r border-dashed border-black/10 h-full"></div>
+            <div class="border-r border-dashed border-black/10 h-full"></div>
+            <div class="h-full"></div>
+          </div>
+
+
+          <div class="relative z-10 px-6 py-16 md:px-12 md:py-20 flex flex-col justify-between min-h-[400px]">
+            <!-- Large Email Header -->
+            <a href="mailto:hello@styx.ai"
+              class="group flex items-start justify-between w-full mb-24 md:mb-32 reveal-on-scroll">
+              <span
+                class="text-4xl sm:text-6xl md:text-7xl lg:text-[7rem] leading-none font-semibold tracking-tighter break-all reveal-on-scroll">
+                HELLO@STYX.AI
+              </span>
+              <div class="pt-2 md:pt-6">
+                <iconify-icon icon="solar:arrow-right-up-linear"
+                  class="w-10 h-10 md:w-20 md:h-20 transform group-hover:-translate-y-2 group-hover:translate-x-2 transition-transform duration-300"></iconify-icon>
+              </div>
+            </a>
+
+            <!-- Info Grid -->
+            <div
+              class="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 md:text-base leading-relaxed z-20 text-sm font-medium relative gap-x-12 gap-y-12">
+              <!-- Col 1: Contact -->
+              <div class="flex flex-col gap-x-4 gap-y-4">
+                <p class="font-semibold reveal-on-scroll">Styx Inc.</p>
+                <p class="max-w-[200px] text-black/80 reveal-on-scroll">
+                  San Francisco, CA<br>
+                  The Future of Work
+                </p>
+              </div>
+
+              <!-- Col 2: Product -->
+              <div class="flex flex-col gap-4">
+                <span class="block text-black/50 font-semibold tracking-tight reveal-on-scroll" style="">
+                  Product
+                </span>
+                <div class="flex flex-col gap-2">
+                  <a href="#" class="hover:text-black/60 transition-colors reveal-on-scroll" style="">
+                    Features
+                  </a>
+                  <a href="#" class="hover:text-black/60 transition-colors reveal-on-scroll" style="">
+                    Integrations
+                  </a>
+                  <a href="#" class="hover:text-black/60 transition-colors reveal-on-scroll" style="">
+                    Pricing
+                  </a>
+                </div>
+              </div>
+
+              <!-- Col 3: Legal -->
+              <div class="flex flex-col gap-4">
+                <span class="block text-black/50 font-semibold tracking-tight reveal-on-scroll" style="">
+                  Legal
+                </span>
+                <div class="flex flex-col gap-2">
+                  <a href="#" class="hover:text-black/60 transition-colors reveal-on-scroll" style="">
+                    Privacy Policy
+                  </a>
+                  <a href="#" class="hover:text-black/60 transition-colors reveal-on-scroll" style="">
+                    Terms of Service
+                  </a>
+                </div>
+              </div>
+
+              <!-- Col 4: Social -->
+              <div class="flex flex-col gap-4">
+                <span class="block text-black/50 font-semibold tracking-tight reveal-on-scroll" style="">
+                  Connect
+                </span>
+                <div class="flex flex-col gap-2">
+                  <a href="#" class="hover:text-black/60 transition-colors reveal-on-scroll" style="">
+                    Twitter / X
+                  </a>
+                  <a href="#" class="hover:text-black/60 transition-colors reveal-on-scroll" style="">
+                    LinkedIn
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Section: Black -->
+        <div
+          class="relative bg-[#05080A] text-white w-full overflow-hidden border-x border-b border-dashed border-white/10"
+          style="">
+          <!-- Grid Pattern Overlay -->
+          <div class="absolute inset-0 grid grid-cols-4 w-full h-full pointer-events-none opacity-20">
+            <div class="border-r border-dashed border-white/20 h-full"></div>
+            <div class="border-r border-dashed border-white/20 h-full"></div>
+            <div class="border-r border-dashed border-white/20 h-full"></div>
+            <div class="h-full"></div>
+          </div>
+
+          <!-- Massive Brand Text -->
+          <div class="relative z-10 w-full flex justify-center items-end leading-none select-none pt-12">
+            <h1
+              class="text-[24vw] md:text-[20rem] font-semibold tracking-tighter text-center leading-[0.75] mb-[-0.08em] mix-blend-screen text-white reveal-on-scroll">
+              STYX
+            </h1>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+
+    <script>
+
+
+      document.addEventListener('DOMContentLoaded', () => {
+        // Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+              setTimeout(() => {
+                entry.target.classList.add('is-visible');
+              }, i * 50);
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.01,
+          rootMargin: '0px 0px -20px 0px'
+        });
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+          observer.observe(el);
+        });
+
+        document.querySelectorAll('main h1, main h2, main h3, main p, main button, main a.btn, main .group, main .grid > div, main .bento-card, footer h1, footer a, footer p, footer span').forEach(el => {
+          if (!el.classList.contains('reveal-on-scroll') && !el.closest('.animate-marquee') && !el.closest('script') && !el.closest('style')) {
+            el.classList.add('reveal-on-scroll');
+            observer.observe(el);
+          }
+        });
+
+        // Bento Hover Effect
+        document.querySelectorAll('.bento-card').forEach(card => {
+          card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / card.clientWidth) * 100;
+            const y = ((e.clientY - rect.top) / card.clientHeight) * 100;
+            card.style.setProperty('--mouse-x', `${x}%`);
+            card.style.setProperty('--mouse-y', `${y}%`);
+          });
+        });
+        // FAQ Toggle
+        window.toggleFAQ = function (el) {
+          const content = el.querySelector('.faq-content');
+          const icon = el.querySelector('.faq-icon iconify-icon');
+          const isOpen = content.style.maxHeight !== '0px' && content.style.maxHeight !== '';
+
+          document.querySelectorAll('.faq-content').forEach(c => c.style.maxHeight = '0px');
+          document.querySelectorAll('.faq-icon iconify-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+
+          if (!isOpen) {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            icon.style.transform = 'rotate(180deg)';
+          }
+        };
+
+        // Mobile Menu Toggle
+        window.toggleMobileMenu = function (show) {
+          const menu = document.getElementById('mobile-menu');
+          if (show) {
+            menu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          } else {
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
+          }
+        };
+
+        // Video Player Logic
+        const player = document.getElementById('demo-video-player');
+        const overlay = document.getElementById('video-overlay');
+        const playBtn = document.getElementById('play-btn');
+
+        if (player && overlay) {
+          overlay.addEventListener('click', () => {
+            if (player.paused) {
+              player.play();
+              playBtn.style.opacity = '0';
+              setTimeout(() => playBtn.style.display = 'none', 400);
+              overlay.style.background = 'transparent';
+            } else {
+              player.pause();
+              playBtn.style.display = 'flex';
+              setTimeout(() => playBtn.style.opacity = '1', 10);
+              overlay.style.background = 'rgba(0,0,0,0.2)';
+            }
+          });
+
+          player.addEventListener('ended', () => {
+            playBtn.style.display = 'flex';
+            setTimeout(() => playBtn.style.opacity = '1', 10);
+            overlay.style.background = 'rgba(0,0,0,0.2)';
+          });
+        }
+      });
+    </script>
+
+    <!-- Floating Assistant Bubble -->
+</body>
+
+</html>
+```
