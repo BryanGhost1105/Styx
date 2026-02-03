@@ -232,7 +232,7 @@
     /* Mobile Menu Overlay */
     #mobile-menu {
       transform: translateX(-100%);
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 9999;
     }
 
     #mobile-menu.active {
@@ -491,42 +491,7 @@
     </div>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-[#05080A] z-[100] md:hidden flex flex-col">
-      <div class="h-16 flex items-center justify-between px-6 border-b border-dashed border-white/10">
-        <div class="flex items-center gap-2">
-          <img id="mobile-logo" src="Whisk_f580a9b66098f97a4b345b004b3e022eeg.png" alt="Styx AI Logo"
-            class="h-8 w-auto">
-        </div>
-        <button onclick="toggleMobileMenu(false)"
-          class="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white">
-          <iconify-icon icon="solar:close-circle-linear" class="w-8 h-8"></iconify-icon>
-        </button>
-      </div>
-      <div class="flex-1 overflow-y-auto pt-8 pb-12 px-8 space-y-8">
-        <nav class="flex flex-col gap-6">
-          <a href="#product" onclick="toggleMobileMenu(false)"
-            class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">PRODUCT</a>
-          <a href="#how-it-works" onclick="toggleMobileMenu(false)"
-            class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">HOW
-            IT WORKS</a>
-          <a href="#capabilities" onclick="toggleMobileMenu(false)"
-            class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">USE
-            CASES</a>
-          <a href="#pricing" onclick="toggleMobileMenu(false)"
-            class="text-2xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist">PRICING</a>
-        </nav>
-        <div class="pt-8 border-t border-dashed border-white/10 space-y-6">
-          <a href="#" class="flex items-center justify-between group">
-            <span class="text-xl font-light text-white/70 group-hover:text-white transition-colors">LOGIN</span>
-            <iconify-icon icon="solar:user-linear" class="text-secondary w-6 h-6"></iconify-icon>
-          </a>
-          <a href="#" onclick="toggleMobileMenu(false)"
-            class="w-full py-5 flex items-center justify-center bg-secondary text-white font-bold text-sm tracking-widest uppercase rounded-sm hover:bg-teal-400 transition-colors font-geist shadow-[0_0_20px_rgba(20,184,166,0.2)]">
-            CLAIM YOUR SYSTEM
-          </a>
-        </div>
-      </div>
-    </div>
+    <!-- Mobile Menu Moved to Body End -->
   </header>
 
   <!-- Main Content Wrapper -->
@@ -1311,7 +1276,7 @@
           <!-- Top Row Grid -->
           <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
             <!-- Top Left: Radar -->
-            <div class="col-span-12 md:col-span-4 bento-card h-[300px] md:h-[400px] reveal-on-scroll">
+            <div class="col-span-12 md:col-span-4 bento-card h-auto min-h-[300px] md:h-[400px] reveal-on-scroll">
               <div class="bento-glow"></div>
               <!-- Asset -->
               <div class="absolute inset-0 opacity-20 filter grayscale hover:grayscale-0 transition-all duration-700">
@@ -1338,7 +1303,7 @@
 
             <!-- Top Middle: Alerts -->
             <div
-              class="col-span-12 md:col-span-5 bento-card p-6 md:p-10 flex flex-col h-[300px] md:h-[400px] reveal-on-scroll">
+              class="col-span-12 md:col-span-5 bento-card p-6 md:p-10 flex flex-col h-auto min-h-[300px] md:h-[400px] reveal-on-scroll">
               <div class="bento-glow"></div>
               <div class="mb-12">
                 <div class="flex items-center gap-2 mb-4">
@@ -1381,7 +1346,8 @@
             </div>
 
             <!-- Top Right: Small Grid -->
-            <div class="col-span-12 md:col-span-3 bento-card p-6 flex flex-col h-[300px] md:h-[400px] reveal-on-scroll">
+            <div
+              class="col-span-12 md:col-span-3 bento-card p-6 flex flex-col h-auto min-h-[300px] md:h-[400px] reveal-on-scroll">
               <div class="bento-glow"></div>
               <div
                 class="relative flex-1 rounded-lg bg-white/[0.01] border border-white/5 overflow-hidden flex items-center justify-center">
@@ -1420,7 +1386,8 @@
           <!-- Bottom Row Grid -->
           <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             <!-- Universal Sync -->
-            <div class="col-span-12 md:col-span-8 bento-card h-[300px] md:h-[350px] overflow-hidden reveal-on-scroll">
+            <div
+              class="col-span-12 md:col-span-8 bento-card h-auto min-h-[300px] md:h-[350px] overflow-hidden reveal-on-scroll">
               <div class="bento-glow"></div>
               <div class="absolute inset-0 opacity-10">
                 <img
@@ -1455,7 +1422,7 @@
 
             <!-- Growth Section -->
             <div
-              class="col-span-12 md:col-span-4 bento-card p-6 md:p-10 flex flex-col justify-center h-[250px] md:h-[350px] reveal-on-scroll">
+              class="col-span-12 md:col-span-4 bento-card p-6 md:p-10 flex flex-col justify-center h-auto min-h-[250px] md:h-[350px] reveal-on-scroll">
               <div class="bento-glow"></div>
               <div class="text-[72px] leading-none font-light tracking-tighter font-geist mb-4 text-secondary"
                 style="text-shadow: 0 0-40px rgba(20, 184, 166, 0.2);">
@@ -2469,9 +2436,11 @@
           if (show) {
             menu.classList.add('active');
             document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden'; // For iOS/Safari
           } else {
             menu.classList.remove('active');
             document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
           }
         };
 
@@ -2505,6 +2474,59 @@
     </script>
 
     <!-- Floating Assistant Bubble -->
+    <!-- Mobile Menu Overlay (Moved) -->
+    <div id="mobile-menu"
+      class="fixed inset-0 z-[9999] md:hidden flex flex-col bg-[#05080A]/95 backdrop-blur-2xl transition-transform duration-500">
+      <!-- Background Gradients -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[100px] pointer-events-none"></div>
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 blur-[100px] pointer-events-none"></div>
+
+      <div
+        class="h-16 flex items-center justify-between px-6 border-b border-dashed border-white/10 relative z-10 bg-black/20">
+        <div class="flex items-center gap-2">
+          <img id="mobile-logo-menu" src="Whisk_f580a9b66098f97a4b345b004b3e022eeg.png" alt="Styx AI Logo"
+            class="h-8 w-auto">
+        </div>
+        <button onclick="toggleMobileMenu(false)"
+          class="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white rounded-full hover:bg-white/10 transition-colors">
+          <iconify-icon icon="solar:close-circle-linear" class="w-8 h-8"></iconify-icon>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto pt-8 pb-12 px-8 space-y-8 relative z-10">
+        <nav class="flex flex-col gap-6">
+          <a href="#product" onclick="toggleMobileMenu(false)"
+            class="text-3xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist group flex items-center gap-2">
+            <span class="w-0 group-hover:w-4 h-[1px] bg-secondary transition-all"></span>
+            PRODUCT
+          </a>
+          <a href="#how-it-works" onclick="toggleMobileMenu(false)"
+            class="text-3xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist group flex items-center gap-2">
+            <span class="w-0 group-hover:w-4 h-[1px] bg-secondary transition-all"></span>
+            HOW IT WORKS
+          </a>
+          <a href="#capabilities" onclick="toggleMobileMenu(false)"
+            class="text-3xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist group flex items-center gap-2">
+            <span class="w-0 group-hover:w-4 h-[1px] bg-secondary transition-all"></span>
+            USE CASES
+          </a>
+          <a href="#pricing" onclick="toggleMobileMenu(false)"
+            class="text-3xl font-light tracking-tighter text-white hover:text-secondary transition-colors font-geist group flex items-center gap-2">
+            <span class="w-0 group-hover:w-4 h-[1px] bg-secondary transition-all"></span>
+            PRICING
+          </a>
+        </nav>
+        <div class="pt-8 border-t border-dashed border-white/10 space-y-6">
+          <a href="#" class="flex items-center justify-between group p-2 hover:bg-white/5 rounded-lg transition-colors">
+            <span class="text-xl font-light text-white/70 group-hover:text-white transition-colors">LOGIN</span>
+            <iconify-icon icon="solar:user-linear" class="text-secondary w-6 h-6"></iconify-icon>
+          </a>
+          <a href="#" onclick="toggleMobileMenu(false)"
+            class="w-full py-5 flex items-center justify-center bg-secondary text-white font-bold text-sm tracking-widest uppercase rounded-sm hover:bg-teal-400 transition-colors font-geist shadow-[0_0_20px_rgba(20,184,166,0.2)]">
+            CLAIM YOUR SYSTEM
+          </a>
+        </div>
+      </div>
+    </div>
 </body>
 
 </html>
